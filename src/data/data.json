@@ -1,0 +1,37 @@
+{
+  "source": "migr_emi5nxt__custom_20081021_spreadsheet.xlsx",
+  "sheet": "Data",
+  "unit": "persons",
+  "series": [
+    {
+      "year": 2020,
+      "insideEU": 1114689,
+      "outsideEU": 947015,
+      "total": 2061704
+    },
+    {
+      "year": 2021,
+      "insideEU": 1311691,
+      "outsideEU": 1304396,
+      "total": 2616087
+    },
+    {
+      "year": 2022,
+      "insideEU": 1423957,
+      "outsideEU": 1197726,
+      "total": 2621683
+    },
+    {
+      "year": 2023,
+      "insideEU": 1414929,
+      "outsideEU": 1503850,
+      "total": 2918779
+    },
+    {
+      "year": 2024,
+      "insideEU": 1508529,
+      "outsideEU": 1555815,
+      "total": 3064344
+    }
+  ]
+}

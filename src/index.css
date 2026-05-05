@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply min-h-screen bg-white text-gray-900;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply rounded-2xl border border-sky-200/90 bg-white/90 shadow-glass backdrop-blur-xl transition-shadow duration-200;
+  }
+  .glass-panel:hover {
+    box-shadow:
+      0 8px 32px rgba(14, 165, 233, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 0 0 1px rgba(56, 189, 248, 0.35);
+  }
+  .text-gradient-cyan {
+    @apply bg-gradient-to-r from-sky-500 via-sky-400 to-cyan-400 bg-clip-text text-transparent;
+  }
+  .chart-glow :is(.recharts-bar-rectangle path, .recharts-sector path, .recharts-line-curve, .recharts-dot circle) {
+    transition: filter 0.2s ease;
+  }
+  .chart-glow :is(.recharts-bar-rectangle path, .recharts-sector path, .recharts-line-curve, .recharts-dot circle):hover {
+    filter: drop-shadow(0 0 6px rgba(14, 165, 233, 0.35));
+  }
+  .map-glow svg path,
+  .map-glow svg circle {
+    transition: filter 0.2s ease;
+  }
+  .map-glow svg path:hover,
+  .map-glow svg circle:hover {
+    filter: drop-shadow(0 0 5px rgba(14, 165, 233, 0.35));
+  }
+}

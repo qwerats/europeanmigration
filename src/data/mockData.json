@@ -1,0 +1,461 @@
+{
+  "meta": {
+    "unit": "persons (selected countries: DE, ES, IT, FR)",
+    "topDestination": "Spain",
+    "topReasonKey": "work",
+    "highestIntensityCountry": "Malta",
+    "totalImmigrants2024": 4150334
+  },
+  "destinations": [
+    {
+      "id": "ES",
+      "name": "Испания",
+      "nameEn": "Spain",
+      "value": 1089361,
+      "intensityPer1k": 0,
+      "shareOfTotalPct": 26.25
+    },
+    {
+      "id": "DE",
+      "name": "Германия",
+      "nameEn": "Germany",
+      "value": 762582,
+      "intensityPer1k": 0,
+      "shareOfTotalPct": 18.37
+    },
+    {
+      "id": "IT",
+      "name": "Италия",
+      "nameEn": "Italy",
+      "value": 389169,
+      "intensityPer1k": 0,
+      "shareOfTotalPct": 9.38
+    },
+    {
+      "id": "FR",
+      "name": "Франция",
+      "nameEn": "France",
+      "value": 324545,
+      "intensityPer1k": 0,
+      "shareOfTotalPct": 7.82
+    }
+  ],
+  "reasons": [
+    {
+      "key": "work",
+      "label": "Работа",
+      "labelEn": "Work",
+      "percent": 35.58,
+      "color": "#22d3ee"
+    },
+    {
+      "key": "family",
+      "label": "Семья",
+      "labelEn": "Family",
+      "percent": 26.16,
+      "color": "#38bdf8"
+    },
+    {
+      "key": "protection",
+      "label": "Образование",
+      "labelEn": "Education",
+      "percent": 13.82,
+      "color": "#67e8f9"
+    },
+    {
+      "key": "other",
+      "label": "Прочее",
+      "labelEn": "Other",
+      "percent": 24.44,
+      "color": "#a5f3fc"
+    }
+  ],
+  "reasonsByYear": {
+    "2021": [
+      { "key": "family", "label": "Семья", "labelEn": "Family", "percent": 24.93, "color": "#38bdf8" },
+      { "key": "education", "label": "Образование", "labelEn": "Education", "percent": 12.15, "color": "#67e8f9" },
+      { "key": "work", "label": "Работа", "labelEn": "Work", "percent": 41.61, "color": "#22d3ee" },
+      { "key": "other", "label": "Прочее", "labelEn": "Other", "percent": 21.3, "color": "#a5f3fc" }
+    ],
+    "2022": [
+      { "key": "family", "label": "Семья", "labelEn": "Family", "percent": 26, "color": "#38bdf8" },
+      { "key": "education", "label": "Образование", "labelEn": "Education", "percent": 13.19, "color": "#67e8f9" },
+      { "key": "work", "label": "Работа", "labelEn": "Work", "percent": 35.51, "color": "#22d3ee" },
+      { "key": "other", "label": "Прочее", "labelEn": "Other", "percent": 25.3, "color": "#a5f3fc" }
+    ],
+    "2023": [
+      { "key": "family", "label": "Семья", "labelEn": "Family", "percent": 26.6, "color": "#38bdf8" },
+      { "key": "education", "label": "Образование", "labelEn": "Education", "percent": 14.26, "color": "#67e8f9" },
+      { "key": "work", "label": "Работа", "labelEn": "Work", "percent": 33.37, "color": "#22d3ee" },
+      { "key": "other", "label": "Прочее", "labelEn": "Other", "percent": 25.78, "color": "#a5f3fc" }
+    ],
+    "2024": [
+      { "key": "family", "label": "Семья", "labelEn": "Family", "percent": 27.12, "color": "#38bdf8" },
+      { "key": "education", "label": "Образование", "labelEn": "Education", "percent": 15.68, "color": "#67e8f9" },
+      { "key": "work", "label": "Работа", "labelEn": "Work", "percent": 31.84, "color": "#22d3ee" },
+      { "key": "other", "label": "Прочее", "labelEn": "Other", "percent": 25.36, "color": "#a5f3fc" }
+    ]
+  },
+  "byYear": {
+    "2021": {
+      "totalEu": 2617188,
+      "destinations": [
+        {
+          "id": "ES",
+          "value": 688004,
+          "shareOfTotalPct": 26.29
+        },
+        {
+          "id": "DE",
+          "value": 440850,
+          "shareOfTotalPct": 16.84
+        },
+        {
+          "id": "IT",
+          "value": 248172,
+          "shareOfTotalPct": 9.48
+        },
+        {
+          "id": "FR",
+          "value": 275271,
+          "shareOfTotalPct": 10.52
+        }
+      ]
+    },
+    "2022": {
+      "totalEu": 5364039,
+      "destinations": [
+        {
+          "id": "ES",
+          "value": 1056802,
+          "shareOfTotalPct": 19.7
+        },
+        {
+          "id": "DE",
+          "value": 1587677,
+          "shareOfTotalPct": 29.6
+        },
+        {
+          "id": "IT",
+          "value": 334484,
+          "shareOfTotalPct": 6.24
+        },
+        {
+          "id": "FR",
+          "value": 360536,
+          "shareOfTotalPct": 6.72
+        }
+      ]
+    },
+    "2023": {
+      "totalEu": 4401424,
+      "destinations": [
+        {
+          "id": "ES",
+          "value": 1042047,
+          "shareOfTotalPct": 23.68
+        },
+        {
+          "id": "DE",
+          "value": 925422,
+          "shareOfTotalPct": 21.03
+        },
+        {
+          "id": "IT",
+          "value": 371622,
+          "shareOfTotalPct": 8.44
+        },
+        {
+          "id": "FR",
+          "value": 345086,
+          "shareOfTotalPct": 7.84
+        }
+      ]
+    },
+    "2024": {
+      "totalEu": 4150334,
+      "destinations": [
+        {
+          "id": "ES",
+          "value": 1089361,
+          "shareOfTotalPct": 26.25
+        },
+        {
+          "id": "DE",
+          "value": 762582,
+          "shareOfTotalPct": 18.37
+        },
+        {
+          "id": "IT",
+          "value": 389169,
+          "shareOfTotalPct": 9.38
+        },
+        {
+          "id": "FR",
+          "value": 324545,
+          "shareOfTotalPct": 7.82
+        }
+      ]
+    }
+  },
+  "flows": [
+    {
+      "id": "f1",
+      "from": {
+        "id": "MA",
+        "label": "Марокко",
+        "x": 269,
+        "y": 512
+      },
+      "to": {
+        "id": "ES",
+        "label": "Испания",
+        "x": 327,
+        "y": 450
+      },
+      "volume": 0.42,
+      "label": "Северная Африка → ES"
+    },
+    {
+      "id": "f2",
+      "from": {
+        "id": "SY",
+        "label": "Сирия (регион)",
+        "x": 938,
+        "y": 498
+      },
+      "to": {
+        "id": "DE",
+        "label": "Германия",
+        "x": 538,
+        "y": 332
+      },
+      "volume": 0.35,
+      "label": "Вост. Средиземноморье → DE"
+    },
+    {
+      "id": "f3",
+      "from": {
+        "id": "UA",
+        "label": "Украина",
+        "x": 848,
+        "y": 356
+      },
+      "to": {
+        "id": "DE",
+        "label": "Германия",
+        "x": 538,
+        "y": 332
+      },
+      "volume": 0.55,
+      "label": "Восточная Европа → DE"
+    },
+    {
+      "id": "f4",
+      "from": {
+        "id": "BD",
+        "label": "Бангладеш",
+        "x": 945,
+        "y": 418
+      },
+      "to": {
+        "id": "IT",
+        "label": "Италия",
+        "x": 571,
+        "y": 427
+      },
+      "volume": 0.22,
+      "label": "Азия → IT"
+    },
+    {
+      "id": "f5",
+      "from": {
+        "id": "PH",
+        "label": "Филиппины",
+        "x": 972,
+        "y": 458
+      },
+      "to": {
+        "id": "FR",
+        "label": "Франция",
+        "x": 415,
+        "y": 387
+      },
+      "volume": 0.18,
+      "label": "Трудовые коридоры → FR"
+    }
+  ],
+  "countryMapNodes": [
+    {
+      "id": "ES",
+      "name": "Испания",
+      "nameEn": "Spain",
+      "cx": 327,
+      "cy": 450,
+      "r": 32,
+      "immigrants": 1089361,
+      "highlight": true
+    },
+    {
+      "id": "DE",
+      "name": "Германия",
+      "nameEn": "Germany",
+      "cx": 538,
+      "cy": 332,
+      "r": 30,
+      "immigrants": 762582,
+      "highlight": true
+    },
+    {
+      "id": "IT",
+      "name": "Италия",
+      "nameEn": "Italy",
+      "cx": 571,
+      "cy": 427,
+      "r": 28,
+      "immigrants": 389169,
+      "highlight": true
+    },
+    {
+      "id": "MT",
+      "name": "Мальта",
+      "nameEn": "Malta",
+      "cx": 597,
+      "cy": 499,
+      "r": 12,
+      "immigrants": 31300,
+      "highlight": false
+    },
+    {
+      "id": "FR",
+      "name": "Франция",
+      "nameEn": "France",
+      "cx": 415,
+      "cy": 387,
+      "r": 26,
+      "immigrants": 324545,
+      "highlight": true
+    },
+    {
+      "id": "PL",
+      "name": "Польша",
+      "nameEn": "Poland",
+      "cx": 668,
+      "cy": 324,
+      "r": 22,
+      "immigrants": 410000,
+      "highlight": false
+    }
+  ],
+  "asylumByYear": {
+    "2021": {
+      "totalEu": 535985,
+      "destinations": [
+        {
+          "id": "DE",
+          "value": 148175
+        },
+        {
+          "id": "ES",
+          "value": 62050
+        },
+        {
+          "id": "FR",
+          "value": 103790
+        },
+        {
+          "id": "IT",
+          "value": 45200
+        }
+      ]
+    },
+    "2022": {
+      "totalEu": 873680,
+      "destinations": [
+        {
+          "id": "DE",
+          "value": 217735
+        },
+        {
+          "id": "ES",
+          "value": 116135
+        },
+        {
+          "id": "FR",
+          "value": 137510
+        },
+        {
+          "id": "IT",
+          "value": 77200
+        }
+      ]
+    },
+    "2023": {
+      "totalEu": 1049510,
+      "destinations": [
+        {
+          "id": "DE",
+          "value": 329035
+        },
+        {
+          "id": "ES",
+          "value": 160460
+        },
+        {
+          "id": "FR",
+          "value": 145055
+        },
+        {
+          "id": "IT",
+          "value": 130565
+        }
+      ]
+    },
+    "2024": {
+      "totalEu": 912425,
+      "destinations": [
+        {
+          "id": "DE",
+          "value": 229695
+        },
+        {
+          "id": "ES",
+          "value": 165435
+        },
+        {
+          "id": "FR",
+          "value": 129820
+        },
+        {
+          "id": "IT",
+          "value": 151120
+        }
+      ]
+    }
+  },
+  "methodology": {
+    "sources": [
+      {
+        "name": "Eurostat",
+        "url": "https://ec.europa.eu/eurostat",
+        "note": "Официальная статистика ЕС по миграции и демографии (mock-агрегаты для демо)."
+      },
+      {
+        "name": "International Organization for Migration (IOM)",
+        "url": "https://www.iom.int",
+        "note": "Контекст миграционных коридоров и методологические рамки."
+      }
+    ],
+    "stack": [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Recharts",
+      "React Router"
+    ],
+    "ai": [
+      "Генерация макетов визуализаций и текстовых пояснений",
+      "Суммаризация показателей для KPI и выводов на дашборде"
+    ]
+  }
+}

@@ -1,0 +1,818 @@
+[
+  {
+    "id": "BE",
+    "name": "Belgium",
+    "year": 2021,
+    "value": 64157
+  },
+  {
+    "id": "BE",
+    "name": "Belgium",
+    "year": 2022,
+    "value": 123845
+  },
+  {
+    "id": "BE",
+    "name": "Belgium",
+    "year": 2023,
+    "value": 88648
+  },
+  {
+    "id": "BE",
+    "name": "Belgium",
+    "year": 2024,
+    "value": 85540
+  },
+  {
+    "id": "BG",
+    "name": "Bulgaria",
+    "year": 2021,
+    "value": 22784
+  },
+  {
+    "id": "BG",
+    "name": "Bulgaria",
+    "year": 2022,
+    "value": 25383
+  },
+  {
+    "id": "BG",
+    "name": "Bulgaria",
+    "year": 2023,
+    "value": 43650
+  },
+  {
+    "id": "BG",
+    "name": "Bulgaria",
+    "year": 2024,
+    "value": 38039
+  },
+  {
+    "id": "CZ",
+    "name": "Czech Republic",
+    "year": 2021,
+    "value": 54117
+  },
+  {
+    "id": "CZ",
+    "name": "Czech Republic",
+    "year": 2022,
+    "value": 330736
+  },
+  {
+    "id": "CZ",
+    "name": "Czech Republic",
+    "year": 2023,
+    "value": 126772
+  },
+  {
+    "id": "CZ",
+    "name": "Czech Republic",
+    "year": 2024,
+    "value": 107760
+  },
+  {
+    "id": "DK",
+    "name": "Denmark",
+    "year": 2021,
+    "value": 27917
+  },
+  {
+    "id": "DK",
+    "name": "Denmark",
+    "year": 2022,
+    "value": 72568
+  },
+  {
+    "id": "DK",
+    "name": "Denmark",
+    "year": 2023,
+    "value": 53924
+  },
+  {
+    "id": "DK",
+    "name": "Denmark",
+    "year": 2024,
+    "value": 59414
+  },
+  {
+    "id": "DE",
+    "name": "Germany",
+    "year": 2021,
+    "value": 440850
+  },
+  {
+    "id": "DE",
+    "name": "Germany",
+    "year": 2022,
+    "value": 1587677
+  },
+  {
+    "id": "DE",
+    "name": "Germany",
+    "year": 2023,
+    "value": 925422
+  },
+  {
+    "id": "DE",
+    "name": "Germany",
+    "year": 2024,
+    "value": 762582
+  },
+  {
+    "id": "EE",
+    "name": "Estonia",
+    "year": 2021,
+    "value": 10295
+  },
+  {
+    "id": "EE",
+    "name": "Estonia",
+    "year": 2022,
+    "value": 40633
+  },
+  {
+    "id": "EE",
+    "name": "Estonia",
+    "year": 2023,
+    "value": 19395
+  },
+  {
+    "id": "EE",
+    "name": "Estonia",
+    "year": 2024,
+    "value": 11649
+  },
+  {
+    "id": "IE",
+    "name": "Ireland",
+    "year": 2021,
+    "value": 65971
+  },
+  {
+    "id": "IE",
+    "name": "Ireland",
+    "year": 2022,
+    "value": 127826
+  },
+  {
+    "id": "IE",
+    "name": "Ireland",
+    "year": 2023,
+    "value": 118269
+  },
+  {
+    "id": "IE",
+    "name": "Ireland",
+    "year": 2024,
+    "value": 104739
+  },
+  {
+    "id": "GR",
+    "name": "Greece",
+    "year": 2021,
+    "value": 38076
+  },
+  {
+    "id": "GR",
+    "name": "Greece",
+    "year": 2022,
+    "value": 72464
+  },
+  {
+    "id": "GR",
+    "name": "Greece",
+    "year": 2023,
+    "value": 83407
+  },
+  {
+    "id": "GR",
+    "name": "Greece",
+    "year": 2024,
+    "value": 94680
+  },
+  {
+    "id": "ES",
+    "name": "Spain",
+    "year": 2021,
+    "value": 688004
+  },
+  {
+    "id": "ES",
+    "name": "Spain",
+    "year": 2022,
+    "value": 1056802
+  },
+  {
+    "id": "ES",
+    "name": "Spain",
+    "year": 2023,
+    "value": 1042047
+  },
+  {
+    "id": "ES",
+    "name": "Spain",
+    "year": 2024,
+    "value": 1089361
+  },
+  {
+    "id": "FR",
+    "name": "France",
+    "year": 2021,
+    "value": 275271
+  },
+  {
+    "id": "FR",
+    "name": "France",
+    "year": 2022,
+    "value": 360536
+  },
+  {
+    "id": "FR",
+    "name": "France",
+    "year": 2023,
+    "value": 345086
+  },
+  {
+    "id": "FR",
+    "name": "France",
+    "year": 2024,
+    "value": 324545
+  },
+  {
+    "id": "HR",
+    "name": "Croatia",
+    "year": 2021,
+    "value": 24210
+  },
+  {
+    "id": "HR",
+    "name": "Croatia",
+    "year": 2022,
+    "value": 45856
+  },
+  {
+    "id": "HR",
+    "name": "Croatia",
+    "year": 2023,
+    "value": 56729
+  },
+  {
+    "id": "HR",
+    "name": "Croatia",
+    "year": 2024,
+    "value": 55366
+  },
+  {
+    "id": "IT",
+    "name": "Italy",
+    "year": 2021,
+    "value": 248172
+  },
+  {
+    "id": "IT",
+    "name": "Italy",
+    "year": 2022,
+    "value": 334484
+  },
+  {
+    "id": "IT",
+    "name": "Italy",
+    "year": 2023,
+    "value": 371622
+  },
+  {
+    "id": "IT",
+    "name": "Italy",
+    "year": 2024,
+    "value": 389169
+  },
+  {
+    "id": "CY",
+    "name": "Cyprus",
+    "year": 2021,
+    "value": 16264
+  },
+  {
+    "id": "CY",
+    "name": "Cyprus",
+    "year": 2022,
+    "value": 26339
+  },
+  {
+    "id": "CY",
+    "name": "Cyprus",
+    "year": 2023,
+    "value": 30454
+  },
+  {
+    "id": "CY",
+    "name": "Cyprus",
+    "year": 2024,
+    "value": 31422
+  },
+  {
+    "id": "LV",
+    "name": "Latvia",
+    "year": 2021,
+    "value": 8993
+  },
+  {
+    "id": "LV",
+    "name": "Latvia",
+    "year": 2022,
+    "value": 34628
+  },
+  {
+    "id": "LV",
+    "name": "Latvia",
+    "year": 2023,
+    "value": 11313
+  },
+  {
+    "id": "LV",
+    "name": "Latvia",
+    "year": 2024,
+    "value": 10709
+  },
+  {
+    "id": "LT",
+    "name": "Lithuania",
+    "year": 2021,
+    "value": 36497
+  },
+  {
+    "id": "LT",
+    "name": "Lithuania",
+    "year": 2022,
+    "value": 79770
+  },
+  {
+    "id": "LT",
+    "name": "Lithuania",
+    "year": 2023,
+    "value": 59262
+  },
+  {
+    "id": "LT",
+    "name": "Lithuania",
+    "year": 2024,
+    "value": 43697
+  },
+  {
+    "id": "LU",
+    "name": "Luxembourg",
+    "year": 2021,
+    "value": 2288
+  },
+  {
+    "id": "LU",
+    "name": "Luxembourg",
+    "year": 2022,
+    "value": 7852
+  },
+  {
+    "id": "LU",
+    "name": "Luxembourg",
+    "year": 2023,
+    "value": 3850
+  },
+  {
+    "id": "LU",
+    "name": "Luxembourg",
+    "year": 2024,
+    "value": 3720
+  },
+  {
+    "id": "HU",
+    "name": "Hungary",
+    "year": 2021,
+    "value": 45702
+  },
+  {
+    "id": "HU",
+    "name": "Hungary",
+    "year": 2022,
+    "value": 57394
+  },
+  {
+    "id": "HU",
+    "name": "Hungary",
+    "year": 2023,
+    "value": 63682
+  },
+  {
+    "id": "HU",
+    "name": "Hungary",
+    "year": 2024,
+    "value": 48493
+  },
+  {
+    "id": "MT",
+    "name": "Malta",
+    "year": 2021,
+    "value": 9668
+  },
+  {
+    "id": "MT",
+    "name": "Malta",
+    "year": 2022,
+    "value": 26837
+  },
+  {
+    "id": "MT",
+    "name": "Malta",
+    "year": 2023,
+    "value": 34176
+  },
+  {
+    "id": "MT",
+    "name": "Malta",
+    "year": 2024,
+    "value": 25993
+  },
+  {
+    "id": "NL",
+    "name": "Netherlands",
+    "year": 2021,
+    "value": 107116
+  },
+  {
+    "id": "NL",
+    "name": "Netherlands",
+    "year": 2022,
+    "value": 212416
+  },
+  {
+    "id": "NL",
+    "name": "Netherlands",
+    "year": 2023,
+    "value": 159735
+  },
+  {
+    "id": "NL",
+    "name": "Netherlands",
+    "year": 2024,
+    "value": 151136
+  },
+  {
+    "id": "AT",
+    "name": "Austria",
+    "year": 2021,
+    "value": 47321
+  },
+  {
+    "id": "AT",
+    "name": "Austria",
+    "year": 2022,
+    "value": 120679
+  },
+  {
+    "id": "AT",
+    "name": "Austria",
+    "year": 2023,
+    "value": 72300
+  },
+  {
+    "id": "AT",
+    "name": "Austria",
+    "year": 2024,
+    "value": 63270
+  },
+  {
+    "id": "PL",
+    "name": "Poland",
+    "year": 2021,
+    "value": 130364
+  },
+  {
+    "id": "PL",
+    "name": "Poland",
+    "year": 2022,
+    "value": 175952
+  },
+  {
+    "id": "PL",
+    "name": "Poland",
+    "year": 2023,
+    "value": 206327
+  },
+  {
+    "id": "PL",
+    "name": "Poland",
+    "year": 2024,
+    "value": 217801
+  },
+  {
+    "id": "PT",
+    "name": "Portugal",
+    "year": 2021,
+    "value": 62421
+  },
+  {
+    "id": "PT",
+    "name": "Portugal",
+    "year": 2022,
+    "value": 131930
+  },
+  {
+    "id": "PT",
+    "name": "Portugal",
+    "year": 2023,
+    "value": 154672
+  },
+  {
+    "id": "PT",
+    "name": "Portugal",
+    "year": 2024,
+    "value": 0
+  },
+  {
+    "id": "RO",
+    "name": "Romania",
+    "year": 2021,
+    "value": 90781
+  },
+  {
+    "id": "RO",
+    "name": "Romania",
+    "year": 2022,
+    "value": 178482
+  },
+  {
+    "id": "RO",
+    "name": "Romania",
+    "year": 2023,
+    "value": 182621
+  },
+  {
+    "id": "RO",
+    "name": "Romania",
+    "year": 2024,
+    "value": 111323
+  },
+  {
+    "id": "SI",
+    "name": "Slovenia",
+    "year": 2021,
+    "value": 18613
+  },
+  {
+    "id": "SI",
+    "name": "Slovenia",
+    "year": 2022,
+    "value": 31026
+  },
+  {
+    "id": "SI",
+    "name": "Slovenia",
+    "year": 2023,
+    "value": 28842
+  },
+  {
+    "id": "SI",
+    "name": "Slovenia",
+    "year": 2024,
+    "value": 27233
+  },
+  {
+    "id": "SK",
+    "name": "Slovakia",
+    "year": 2021,
+    "value": 1839
+  },
+  {
+    "id": "SK",
+    "name": "Slovakia",
+    "year": 2022,
+    "value": 1880
+  },
+  {
+    "id": "SK",
+    "name": "Slovakia",
+    "year": 2023,
+    "value": 2519
+  },
+  {
+    "id": "SK",
+    "name": "Slovakia",
+    "year": 2024,
+    "value": 3565
+  },
+  {
+    "id": "FI",
+    "name": "Finland",
+    "year": 2021,
+    "value": 21191
+  },
+  {
+    "id": "FI",
+    "name": "Finland",
+    "year": 2022,
+    "value": 35985
+  },
+  {
+    "id": "FI",
+    "name": "Finland",
+    "year": 2023,
+    "value": 60291
+  },
+  {
+    "id": "FI",
+    "name": "Finland",
+    "year": 2024,
+    "value": 52453
+  },
+  {
+    "id": "SE",
+    "name": "Sweden",
+    "year": 2021,
+    "value": 60118
+  },
+  {
+    "id": "SE",
+    "name": "Sweden",
+    "year": 2022,
+    "value": 64059
+  },
+  {
+    "id": "SE",
+    "name": "Sweden",
+    "year": 2023,
+    "value": 56409
+  },
+  {
+    "id": "SE",
+    "name": "Sweden",
+    "year": 2024,
+    "value": 82003
+  },
+  {
+    "id": "IS",
+    "name": "Iceland",
+    "year": 2021,
+    "value": 2599
+  },
+  {
+    "id": "IS",
+    "name": "Iceland",
+    "year": 2022,
+    "value": 5716
+  },
+  {
+    "id": "IS",
+    "name": "Iceland",
+    "year": 2023,
+    "value": 4057
+  },
+  {
+    "id": "IS",
+    "name": "Iceland",
+    "year": 2024,
+    "value": 3644
+  },
+  {
+    "id": "LI",
+    "name": "Liechtenstein",
+    "year": 2021,
+    "value": 486
+  },
+  {
+    "id": "LI",
+    "name": "Liechtenstein",
+    "year": 2022,
+    "value": 531
+  },
+  {
+    "id": "LI",
+    "name": "Liechtenstein",
+    "year": 2023,
+    "value": 481
+  },
+  {
+    "id": "LI",
+    "name": "Liechtenstein",
+    "year": 2024,
+    "value": 971
+  },
+  {
+    "id": "NO",
+    "name": "Norway",
+    "year": 2021,
+    "value": 22900
+  },
+  {
+    "id": "NO",
+    "name": "Norway",
+    "year": 2022,
+    "value": 59813
+  },
+  {
+    "id": "NO",
+    "name": "Norway",
+    "year": 2023,
+    "value": 57521
+  },
+  {
+    "id": "NO",
+    "name": "Norway",
+    "year": 2024,
+    "value": 41383
+  },
+  {
+    "id": "CH",
+    "name": "Switzerland",
+    "year": 2021,
+    "value": 49212
+  },
+  {
+    "id": "CH",
+    "name": "Switzerland",
+    "year": 2022,
+    "value": 50801
+  },
+  {
+    "id": "CH",
+    "name": "Switzerland",
+    "year": 2023,
+    "value": 81025
+  },
+  {
+    "id": "CH",
+    "name": "Switzerland",
+    "year": 2024,
+    "value": 55554
+  },
+  {
+    "id": "GB",
+    "name": "United Kingdom",
+    "year": 2021,
+    "value": 0
+  },
+  {
+    "id": "GB",
+    "name": "United Kingdom",
+    "year": 2022,
+    "value": 0
+  },
+  {
+    "id": "GB",
+    "name": "United Kingdom",
+    "year": 2023,
+    "value": 0
+  },
+  {
+    "id": "GB",
+    "name": "United Kingdom",
+    "year": 2024,
+    "value": 0
+  },
+  {
+    "id": "ME",
+    "name": "Montenegro",
+    "year": 2021,
+    "value": 0
+  },
+  {
+    "id": "ME",
+    "name": "Montenegro",
+    "year": 2022,
+    "value": 14887
+  },
+  {
+    "id": "ME",
+    "name": "Montenegro",
+    "year": 2023,
+    "value": 16729
+  },
+  {
+    "id": "ME",
+    "name": "Montenegro",
+    "year": 2024,
+    "value": 18170
+  },
+  {
+    "id": "MK",
+    "name": "North Macedonia",
+    "year": 2021,
+    "value": 1272
+  },
+  {
+    "id": "MK",
+    "name": "North Macedonia",
+    "year": 2022,
+    "value": 2114
+  },
+  {
+    "id": "MK",
+    "name": "North Macedonia",
+    "year": 2023,
+    "value": 0
+  },
+  {
+    "id": "MK",
+    "name": "North Macedonia",
+    "year": 2024,
+    "value": 6703
+  }
+]
