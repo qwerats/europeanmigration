@@ -100,8 +100,7 @@ export default function Statistics() {
           </p>
           <h2 className="text-3xl font-bold text-gray-900">Статистический эксплорер</h2>
           <p className="max-w-2xl text-gray-600">
-            Фильтр по годам и визуализация структура причин и динамика
-            совокупного притока.
+            Фильтр по годам и визуализация структура причин и динамика притока/оттока.
           </p>
         </div>
         <div className="glass-panel flex items-center gap-2 p-1">

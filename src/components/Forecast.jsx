@@ -188,7 +188,7 @@ export default function Forecast() {
           </div>
         </div>
         <p className="mt-6 text-xs leading-relaxed text-gray-500">
-          Прогноз носит иллюстративный характер и не является официальной статистикой Eurostat.
+          Прогноз носит иллюстративный характер.
         </p>
       </section>
     </div>

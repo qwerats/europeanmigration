@@ -69,8 +69,8 @@ export default function Dashboard() {
         </Link>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-5">
-        <div className="lg:col-span-3">
+      <section className="space-y-6">
+        <div>
           <h3 className="mb-4 text-lg font-semibold text-gray-900">Интерактивная карта Европы</h3>
           <EuropeMapInteractive
             flows={mockData.flows}
@@ -79,14 +79,13 @@ export default function Dashboard() {
             showLegend
           />
         </div>
-        <div className="glass-panel flex flex-col justify-center p-6 lg:col-span-2">
+        <div className="glass-panel flex flex-col justify-center p-6">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-700">
             О проекте
           </h3>
           <p className="mt-4 text-sm leading-relaxed text-gray-600">
             Платформа объединяет географию потоков, анализ статистики и прогнозные модели по данным 2021–2024 гг.
           </p>
-          {/* Список со строками удален */}
         </div>
       </section>
 

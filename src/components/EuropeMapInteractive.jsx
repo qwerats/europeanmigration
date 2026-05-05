@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import countriesMap from '../data/europeCountriesMap.json';
 import immigrationData from '../data/immigrationData.json';
 
@@ -250,12 +249,6 @@ export default function EuropeMapInteractive({
           className="w-full accent-sky-500"
         />
       </div>
-
-      {compact && (
-        <Link to="/geography" className="inline-flex text-sm font-medium text-sky-600 transition hover:text-sky-700">
-          Полный географический анализ →
-        </Link>
-      )}
     </div>
   );
 }

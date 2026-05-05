@@ -45,13 +45,6 @@ export default function Geography() {
               ))}
             </ul>
           </div>
-          <div className="glass-panel p-5 text-sm text-gray-600">
-            <h3 className="text-sm font-semibold text-sky-800">Легенда потоков</h3>
-            <p className="mt-2 leading-relaxed">
-              Линии показывают условные коридоры; толщина отражает относительный объём в демо-наборе.
-              Узлы с яркой обводкой — приоритетные юрисдикции согласно заданию.
-            </p>
-          </div>
         </aside>
       </div>
     </div>
