@@ -35,7 +35,7 @@ const chartTooltip = {
 };
 
 export default function Forecast() {
-  const { chartData, forecastTable, predictImm, predictEmi } = useMemo(() => {
+  const { chartData, forecastTable } = useMemo(() => {
     const immigration = FACT_YEARS.map((y) => mockData.byYear[String(y)].totalEu);
     const emiByYear = Object.fromEntries(
       (emigrationData.series ?? []).map((row) => [row.year, row.outsideEU ?? 0])
@@ -81,12 +81,8 @@ export default function Forecast() {
           Прогноз внешней миграции ЕС (на базе 2021–2024)
         </h2>
         <p className="max-w-3xl text-gray-600">
-          Иммиграция — суммарный приток в ЕС по данным дашборда (
-          <span className="font-medium text-gray-800">mockData.byYear.totalEu</span>
-          ); эмиграция — отток в страны вне ЕС (
-          <span className="font-medium text-gray-800">outsideEU</span> из{' '}
-          <span className="font-medium text-gray-800">data.json</span>
-          ). Прогноз 2025–2027 — линейная регрессия по четырём годам факта (простая экстраполяция в Colab).
+          Иммиграция — суммарный приток в ЕС ; эмиграция — отток в страны вне ЕС. Прогноз 2025–2027 —
+          линейная регрессия по четырём годам факта (простая экстраполяция в Colab).
         </p>
       </header>
 
