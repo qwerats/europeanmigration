@@ -1,0 +1,18 @@
+[
+  { "year": "2010", "other": 12.4, "germany": 9.8, "france": 7.3, "spain": 6.3, "italy": 4.6 },
+  { "year": "2011", "other": 12.7, "germany": 8.9, "france": 7.3, "spain": 6.3, "italy": 4.8 },
+  { "year": "2012", "other": 13.4, "germany": 9.1, "france": 7.5, "spain": 6.3, "italy": 5.0 },
+  { "year": "2013", "other": 14.1, "germany": 9.5, "france": 7.5, "spain": 6.2, "italy": 5.2 },
+  { "year": "2014", "other": 14.5, "germany": 9.8, "france": 7.7, "spain": 6.0, "italy": 5.4 },
+  { "year": "2015", "other": 14.9, "germany": 10.2, "france": 7.9, "spain": 5.9, "italy": 5.4 },
+  { "year": "2016", "other": 15.4, "germany": 10.9, "france": 8.0, "spain": 5.9, "italy": 5.7 },
+  { "year": "2017", "other": 16.1, "germany": 12.1, "france": 8.1, "spain": 6.0, "italy": 5.8 },
+  { "year": "2018", "other": 16.7, "germany": 13.7, "france": 8.2, "spain": 6.2, "italy": 5.9 },
+  { "year": "2019", "other": 17.3, "germany": 14.9, "france": 8.4, "spain": 6.5, "italy": 6.1 },
+  { "year": "2020", "other": 18.2, "germany": 15.0, "france": 8.5, "spain": 7.0, "italy": 6.2 },
+  { "year": "2021", "other": 18.3, "germany": 15.2, "france": 8.5, "spain": 7.3, "italy": 6.3 },
+  { "year": "2022", "other": 18.4, "germany": 15.3, "france": 8.6, "spain": 7.5, "italy": 6.2 },
+  { "year": "2023", "other": 20.1, "germany": 16.4, "france": 9.0, "spain": 8.2, "italy": 6.4 },
+  { "year": "2024", "other": 20.8, "germany": 16.9, "france": 9.4, "spain": 8.8, "italy": 6.7 },
+  { "year": "2025", "other": 21.5, "germany": 17.2, "france": 9.6, "spain": 9.5, "italy": 6.9 }
+]

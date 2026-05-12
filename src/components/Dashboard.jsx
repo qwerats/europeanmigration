@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import mockData from '../data/mockData.json';
+import { publicUrl } from '../utils/publicUrl';
 import KPICard from './KPICard';
 import EuropeMapInteractive from './EuropeMapInteractive';
 
@@ -138,7 +139,7 @@ export default function Dashboard() {
             </button>
             <video
               className="h-[300px] w-full object-cover"
-              src="/avatar/heygen-avatar.mp4"
+              src={publicUrl('avatar/heygen-avatar.mp4')}
               autoPlay
               playsInline
               controls

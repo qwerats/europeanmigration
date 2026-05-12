@@ -11,9 +11,14 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Legend,
+  LabelList,
+  Customized,
+  ReferenceLine,
 } from 'recharts';
 import mockData from '../data/mockData.json';
 import emigrationData from '../data/data.json';
+import euForeignBornByYear from '../data/euForeignBornByYear.json';
+import euBigFiveByYear from '../data/euBigFiveByYear.json';
 
 const years = ['2021', '2022', '2023', '2024'];
 
@@ -35,6 +40,77 @@ const REASON_COLORS = {
   work: '#06b6d4',
   other: '#ef4444',
 };
+
+const EU_FOREIGN_BORN_LABEL_YEARS = new Set(['2010', '2024', '2025']);
+
+function renderForeignBornValueLabel(props) {
+  const { x, y, value, payload } = props;
+  if (x == null || y == null || value == null || !payload?.year) return null;
+  if (!EU_FOREIGN_BORN_LABEL_YEARS.has(String(payload.year))) return null;
+  return (
+    <text x={x} y={y - 10} fill="#5b21b6" fontSize={11} fontWeight={600} textAnchor="middle">
+      {Number(value).toFixed(1)}
+    </text>
+  );
+}
+
+/**
+ * Как на образце 2: пунктирные вертикали по 2015 / 2020 / 2022 задаёт ReferenceLine;
+ * подписи — строго горизонтально, чуть правее вертикали года, сразу под маркером на кривой.
+ */
+function EuForeignBornEventOverlays(chartProps) {
+  const { formattedGraphicalItems, offset } = chartProps;
+  if (!offset || !Array.isArray(formattedGraphicalItems)) return null;
+
+  const lineEntry = formattedGraphicalItems.find(
+    (g) => Array.isArray(g?.props?.points) && g.props.points.length > 0
+  );
+  const pts = lineEntry?.props?.points;
+  if (!pts?.length) return null;
+
+  const byYear = {};
+  pts.forEach((p) => {
+    const y = p?.payload?.year != null ? String(p.payload.year) : '';
+    if (y) byYear[y] = p;
+  });
+
+  const plotBottom = offset.top + offset.height;
+  const padAboveAxis = 32;
+
+  const events = [
+    { key: 'syrian', year: '2015', label: 'Сирийский миграционный кризис', dy: 12 },
+    { key: 'covid', year: '2020', label: 'COVID-19', dy: 22 },
+    { key: 'ukraine', year: '2022', label: 'Война в Украине', dy: 13 },
+  ];
+
+  return (
+    <g className="eu-foreign-born-events pointer-events-none" aria-hidden>
+      {events.map((e) => {
+        const p = byYear[e.year];
+        if (!p || p.x == null || p.y == null) return null;
+        const { x, y: yTop } = p;
+        const textX = x + 5;
+        const textY = Math.min(yTop + e.dy, plotBottom - padAboveAxis);
+
+        return (
+          <text
+            key={e.key}
+            x={textX}
+            y={textY}
+            textAnchor="start"
+            dominantBaseline="hanging"
+            fill="#94a3b8"
+            fontSize={9.5}
+            fontStyle="italic"
+            fontWeight={400}
+          >
+            {e.label}
+          </text>
+        );
+      })}
+    </g>
+  );
+}
 
 function renderPieLabel({ cx, cy, midAngle, outerRadius, percent, payload }) {
   const radius = outerRadius + 22;
@@ -121,6 +197,209 @@ export default function Statistics() {
           ))}
         </div>
       </header>
+
+      <section className="glass-panel chart-glow overflow-visible p-5">
+        <h3 className="relative z-10 mb-1 text-center text-base font-semibold leading-snug text-gray-900">
+          Количество мигрантов в ЕС
+        </h3>
+        <div className="relative z-0 mt-4 h-[420px] w-full min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={euForeignBornByYear} margin={{ top: 16, right: 20, left: 16, bottom: 36 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.45)" />
+              <ReferenceLine
+                x="2015"
+                stroke="#9ca3af"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+              />
+              <ReferenceLine
+                x="2020"
+                stroke="#9ca3af"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+              />
+              <ReferenceLine
+                x="2022"
+                stroke="#9ca3af"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+              />
+              <XAxis
+                dataKey="year"
+                tick={{ fill: '#475569', fontSize: 11 }}
+                axisLine={{ stroke: '#cbd5e1' }}
+                tickLine={{ stroke: '#cbd5e1' }}
+                label={{ value: 'Год', position: 'insideBottom', offset: -12, fill: '#64748b', fontSize: 12 }}
+              />
+              <YAxis
+                domain={[40, 65]}
+                ticks={[40, 42.5, 45, 47.5, 50, 52.5, 55, 57.5, 60, 62.5, 65]}
+                allowDataOverflow={false}
+                tick={{ fill: '#475569', fontSize: 11 }}
+                axisLine={{ stroke: '#cbd5e1' }}
+                tickLine={{ stroke: '#cbd5e1' }}
+                tickFormatter={(v) => Number(v).toFixed(1)}
+                label={{
+                  value: 'Количество мигрантов, млн',
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: 4,
+                  fill: '#64748b',
+                  fontSize: 12,
+                }}
+              />
+              <Tooltip
+                {...chartTooltip}
+                formatter={(val) => [`${Number(val).toFixed(1)} млн`, 'Численность']}
+                labelFormatter={(l) => `Год ${l}`}
+              />
+              <Line
+                type="monotone"
+                dataKey="millions"
+                name="Иностранное население"
+                stroke="#7c3aed"
+                strokeWidth={2.5}
+                dot={{ r: 4, fill: '#7c3aed', stroke: '#fff', strokeWidth: 1.5 }}
+                activeDot={{ r: 6 }}
+                isAnimationActive
+                animationBegin={120}
+                animationDuration={2400}
+                animationEasing="ease-in-out"
+              >
+                <LabelList dataKey="millions" content={renderForeignBornValueLabel} />
+              </Line>
+              <Customized component={EuForeignBornEventOverlays} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <h3 className="relative z-10 mt-10 text-center text-base font-semibold leading-snug text-gray-900">
+          Страны с наибольшим количеством мигрантов
+        </h3>
+        <div className="relative z-0 mt-4 h-[440px] w-full min-h-0">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={euBigFiveByYear} margin={{ top: 16, right: 20, left: 16, bottom: 52 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.45)" />
+              <ReferenceLine
+                x="2015"
+                stroke="#9ca3af"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+              />
+              <ReferenceLine
+                x="2020"
+                stroke="#9ca3af"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+              />
+              <ReferenceLine
+                x="2022"
+                stroke="#9ca3af"
+                strokeWidth={1}
+                strokeDasharray="4 4"
+              />
+              <XAxis
+                dataKey="year"
+                tick={{ fill: '#475569', fontSize: 11 }}
+                axisLine={{ stroke: '#cbd5e1' }}
+                tickLine={{ stroke: '#cbd5e1' }}
+                label={{ value: 'Год', position: 'insideBottom', offset: -8, fill: '#64748b', fontSize: 12 }}
+              />
+              <YAxis
+                domain={[4, 22]}
+                ticks={[4, 6, 8, 10, 12, 14, 16, 18, 20, 22]}
+                tick={{ fill: '#475569', fontSize: 11 }}
+                axisLine={{ stroke: '#cbd5e1' }}
+                tickLine={{ stroke: '#cbd5e1' }}
+                tickFormatter={(v) => Number(v).toFixed(1)}
+                label={{
+                  value: 'Количество мигрантов, млн',
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: 4,
+                  fill: '#64748b',
+                  fontSize: 12,
+                }}
+              />
+              <Tooltip
+                {...chartTooltip}
+                formatter={(val, name) => [`${Number(val).toFixed(1)} млн`, name]}
+                labelFormatter={(l) => `Год ${l}`}
+              />
+              <Legend
+                verticalAlign="bottom"
+                align="center"
+                wrapperStyle={{ fontSize: '12px', color: '#475569', paddingTop: 8 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="other"
+                name="Другие страны"
+                stroke="#f97316"
+                strokeWidth={2.2}
+                dot={{ r: 3.5, fill: '#f97316', stroke: '#fff', strokeWidth: 1.2 }}
+                activeDot={{ r: 5 }}
+                isAnimationActive
+                animationBegin={80}
+                animationDuration={1800}
+                animationEasing="ease-in-out"
+              />
+              <Line
+                type="monotone"
+                dataKey="germany"
+                name="Германия"
+                stroke="#1e3a8f"
+                strokeWidth={2.2}
+                dot={{ r: 3.5, fill: '#1e3a8f', stroke: '#fff', strokeWidth: 1.2 }}
+                activeDot={{ r: 5 }}
+                isAnimationActive
+                animationBegin={120}
+                animationDuration={1800}
+                animationEasing="ease-in-out"
+              />
+              <Line
+                type="monotone"
+                dataKey="france"
+                name="Франция"
+                stroke="#0f766e"
+                strokeWidth={2.2}
+                dot={{ r: 3.5, fill: '#0f766e', stroke: '#fff', strokeWidth: 1.2 }}
+                activeDot={{ r: 5 }}
+                isAnimationActive
+                animationBegin={160}
+                animationDuration={1800}
+                animationEasing="ease-in-out"
+              />
+              <Line
+                type="monotone"
+                dataKey="spain"
+                name="Испания"
+                stroke="#e11d48"
+                strokeWidth={2.2}
+                dot={{ r: 3.5, fill: '#e11d48', stroke: '#fff', strokeWidth: 1.2 }}
+                activeDot={{ r: 5 }}
+                isAnimationActive
+                animationBegin={200}
+                animationDuration={1800}
+                animationEasing="ease-in-out"
+              />
+              <Line
+                type="monotone"
+                dataKey="italy"
+                name="Италия"
+                stroke="#78716c"
+                strokeWidth={2.2}
+                dot={{ r: 3.5, fill: '#78716c', stroke: '#fff', strokeWidth: 1.2 }}
+                activeDot={{ r: 5 }}
+                isAnimationActive
+                animationBegin={240}
+                animationDuration={1800}
+                animationEasing="ease-in-out"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
 
       <div className="grid gap-6 lg:grid-cols-1"> 
         {/* Изменил lg:grid-cols-2 на 1, чтобы круговая диаграмма была крупнее, 

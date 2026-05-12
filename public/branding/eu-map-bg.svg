@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 420" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="euSea" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#dfe8f4"/>
+      <stop offset="100%" stop-color="#c5d4ea"/>
+    </linearGradient>
+  </defs>
+  <rect width="520" height="420" fill="url(#euSea)"/>
+  <!-- !B8;87>20==0O :0@B0 !: 25:B>@, 157 2>4O=KE 7=0:>2 -->
+  <g opacity="0.92">
+    <path fill="#7a9bc9" d="M86 210 L118 188 L152 196 L168 218 L142 242 L98 232 Z"/>
+    <path fill="#6d8fc0" d="M118 188 L168 172 L198 188 L188 212 L152 196 Z"/>
+    <path fill="#8aaed4" d="M168 172 L228 168 L248 198 L210 218 L188 212 Z"/>
+    <path fill="#7597c7" d="M228 168 L288 178 L302 208 L248 198 Z"/>
+    <path fill="#6a8bbb" d="M288 178 L338 200 L322 238 L302 208 Z"/>
+    <path fill="#7f9dcc" d="M198 188 L248 198 L238 252 L198 262 L168 232 Z"/>
+    <path fill="#6f90c2" d="M248 198 L302 208 L292 258 L238 252 Z"/>
+    <path fill="#85a6d2" d="M302 208 L338 200 L352 248 L292 258 Z"/>
+    <path fill="#7394c4" d="M168 232 L198 262 L182 302 L138 288 L142 242 Z"/>
+    <path fill="#6889bb" d="M198 262 L238 252 L248 292 L212 318 L182 302 Z"/>
+    <path fill="#7c9bca" d="M238 252 L292 258 L278 308 L248 292 Z"/>
+    <path fill="#6a8bbb" d="M292 258 L352 248 L368 298 L308 318 L278 308 Z"/>
+    <path fill="#8aaed4" d="M138 288 L182 302 L168 348 L118 332 Z"/>
+    <path fill="#7597c7" d="M182 302 L212 318 L198 358 L158 342 Z"/>
+    <path fill="#6d8fc0" d="M212 318 L278 308 L268 352 L218 368 Z"/>
+    <path fill="#7a9bc9" d="M278 308 L308 318 L298 362 L252 352 Z"/>
+    <path fill="#6889bb" d="M308 318 L368 298 L382 338 L318 358 Z"/>
+    <path fill="#8aaed4" d="M88 148 L128 132 L152 156 L118 172 Z"/>
+    <path fill="#7394c4" d="M128 132 L178 128 L192 158 L152 156 Z"/>
+    <path fill="#6f90c2" d="M178 128 L218 138 L208 168 L192 158 Z"/>
+  </g>
+  <g stroke="#ffffff" stroke-width="0.8" opacity="0.55">
+    <path d="M86 210 L118 188 L168 172 L228 168 L288 178 L338 200 L352 248 L368 298 L382 338"/>
+    <path d="M168 232 L198 262 L238 252 L292 258 L278 308 L248 292 L212 318"/>
+  </g>
+</svg>
