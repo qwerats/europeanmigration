@@ -18,6 +18,7 @@ const INTRO_BAR_PT = SHOW_SITE_HEADER ? 'pt-[13.5rem]' : 'pt-40';
 export default function IntroPage() {
   const navigate = useNavigate();
   const sectionMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
+  const heroMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
   const goToSection = (id) => {
     if (id === 'intro') {
       navigate({ pathname: '/', hash: '' });
@@ -32,7 +33,7 @@ export default function IntroPage() {
 
   return (
     <section
-      className={`relative ${sectionMinH} w-full min-w-0 max-w-none overflow-x-hidden bg-[#0a1628] text-slate-900`}
+      className={`relative ${sectionMinH} w-full min-w-0 max-w-none overflow-x-hidden bg-[#0a1a32] text-slate-900`}
     >
       <div
         className={`fixed left-0 right-0 shadow-[0_4px_20px_rgba(0,0,0,0.12)] ${
@@ -72,11 +73,9 @@ export default function IntroPage() {
       </div>
 
       <div
-        className={`relative flex w-full min-w-0 items-end justify-center overflow-hidden ${INTRO_BAR_PT} ${
-          SHOW_SITE_HEADER ? 'min-h-[calc(100vh-13.5rem)]' : 'min-h-[calc(100vh-8rem)]'
-        }`}
+        className={`relative flex w-full min-w-0 items-end justify-center overflow-hidden ${INTRO_BAR_PT} ${heroMinH}`}
       >
-        <div className="absolute inset-0 z-0 bg-[#0a1628]" aria-hidden />
+        <div className="absolute inset-0 z-0 bg-[#0a1a32]" aria-hidden />
 
         <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
           <div className="absolute inset-0 bg-[linear-gradient(180deg,#0c1f3d_0%,#1a3a63_32%,#1e3a5f_68%,#0a1a32_100%)]" />
@@ -95,7 +94,7 @@ export default function IntroPage() {
           aria-hidden
         />
 
-        <div className="relative z-20 mb-20 flex max-w-5xl flex-col items-center px-4 text-center text-white">
+        <div className="relative z-20 mb-24 flex max-w-5xl flex-col items-center px-4 pb-2 text-center text-white sm:mb-28">
           <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight drop-shadow-md sm:text-4xl md:text-5xl">
             Анализ миграционных потоков в Европейском союзе
           </h2>
@@ -111,7 +110,7 @@ export default function IntroPage() {
         <button
           type="button"
           onClick={() => goToSection('home')}
-          className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white animate-pulse drop-shadow-[0_0_14px_rgba(255,255,255,0.55)] transition hover:animate-none hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white animate-pulse drop-shadow-[0_0_14px_rgba(255,255,255,0.55)] transition hover:animate-none hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:bottom-4"
           aria-label="Прокрутить вниз к разделу Главная"
         >
           <svg
