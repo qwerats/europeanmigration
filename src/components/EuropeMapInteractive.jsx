@@ -60,6 +60,8 @@ export default function EuropeMapInteractive({
   const activeHover = hoverCountryId ? countries.find((c) => c.id === hoverCountryId) ?? null : null;
   const selectedYear = controlledYear ?? internalYear;
   const yearIndex = YEARS.indexOf(selectedYear);
+  /** Год переключается снаружи (например, в шапке Statistics) — не дублируем кнопки и слайдер года. */
+  const hideInlineYearControls = controlledYear != null && typeof onYearChange === 'function';
   const setSelectedYear = (nextYear) => {
     if (controlledYear == null) {
       setInternalYear(nextYear);
@@ -115,23 +117,25 @@ export default function EuropeMapInteractive({
 
   return (
     <div className={compact ? 'space-y-3' : 'space-y-4'}>
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {YEARS.map((year) => (
-          <button
-            key={year}
-            type="button"
-            onClick={() => setSelectedYear(year)}
-            className={[
-              'rounded-lg border px-4 py-2 text-sm font-semibold transition-all duration-200',
-              selectedYear === year
-                ? 'border-sky-500 bg-sky-500 text-white shadow-[0_0_14px_rgba(14,165,233,0.25)]'
-                : 'border-sky-200 bg-white text-gray-700 hover:bg-sky-50',
-            ].join(' ')}
-          >
-            {year}
-          </button>
-        ))}
-      </div>
+      {!hideInlineYearControls ? (
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {YEARS.map((year) => (
+            <button
+              key={year}
+              type="button"
+              onClick={() => setSelectedYear(year)}
+              className={[
+                'rounded-lg border px-4 py-2 text-sm font-semibold transition-all duration-200',
+                selectedYear === year
+                  ? 'border-sky-500 bg-sky-500 text-white shadow-[0_0_14px_rgba(14,165,233,0.25)]'
+                  : 'border-sky-200 bg-white text-gray-700 hover:bg-sky-50',
+              ].join(' ')}
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <div className="glass-panel map-glow relative overflow-hidden p-2 sm:p-4">
         <div className="mb-2 text-sm font-semibold text-slate-700">Тепловая карта иммиграции в ЕС (2021-2024)</div>

@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import OnePager from './components/OnePager';
 import Dashboard from './components/Dashboard';
-import Geography from './components/Geography';
 import Statistics from './components/Statistics';
 import AiAssistantPage from './components/AiAssistantPage';
 import Forecast from './components/Forecast';
@@ -17,7 +16,7 @@ export default function App() {
         <Route path="/contact" element={<IntroNavPage title="Contact" />} />
         <Route path="/resources" element={<IntroNavPage title="Resources" />} />
         <Route path="/home" element={<Dashboard />} />
-        <Route path="/geography" element={<Geography />} />
+        <Route path="/geography" element={<Navigate to="/statistics" replace />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/forecast" element={<Forecast />} />
         <Route path="/methodology" element={<AiAssistantPage />} />

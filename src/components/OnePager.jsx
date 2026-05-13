@@ -1,7 +1,6 @@
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import IntroPage from './IntroPage';
 import Dashboard from './Dashboard';
-import Geography from './Geography';
 import Statistics from './Statistics';
 import Forecast from './Forecast';
 import AiAssistantPage from './AiAssistantPage';
@@ -9,7 +8,6 @@ import AiAssistantPage from './AiAssistantPage';
 const SECTIONS = [
   { id: 'intro', tone: 'dark', Component: IntroPage },
   { id: 'home', tone: 'light', Component: Dashboard },
-  { id: 'geography', tone: 'light', Component: Geography },
   { id: 'statistics', tone: 'light', Component: Statistics },
   { id: 'forecast', tone: 'light', Component: Forecast },
   { id: 'methodology', tone: 'light', Component: AiAssistantPage },

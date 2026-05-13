@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import mockData from '../data/mockData.json';
 import { publicUrl } from '../utils/publicUrl';
 import KPICard from './KPICard';
-import EuropeMapInteractive from './EuropeMapInteractive';
 
 export default function Dashboard() {
   const [showAvatarPrompt, setShowAvatarPrompt] = useState(false);
@@ -70,16 +69,7 @@ export default function Dashboard() {
         </Link>
       </section>
 
-      <section className="space-y-6">
-        <div>
-          <h3 className="mb-4 text-lg font-semibold text-gray-900">Интерактивная карта Европы</h3>
-          <EuropeMapInteractive
-            flows={mockData.flows}
-            nodes={mockData.countryMapNodes}
-            compact
-            showLegend
-          />
-        </div>
+      <section>
         <div className="glass-panel flex flex-col justify-center p-6">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-700">
             О проекте

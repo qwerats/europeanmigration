@@ -17,6 +17,7 @@ import {
 } from 'recharts';
 import mockData from '../data/mockData.json';
 import emigrationData from '../data/data.json';
+import EuropeMapInteractive from './EuropeMapInteractive';
 import euForeignBornByYear from '../data/euForeignBornByYear.json';
 import euBigFiveByYear from '../data/euBigFiveByYear.json';
 
@@ -167,6 +168,14 @@ export default function Statistics() {
     }));
   }, []);
 
+  const mapDestinationsForYear = useMemo(() => {
+    const yearData = mockData.byYear[year]?.destinations ?? [];
+    const valueById = Object.fromEntries(yearData.map((d) => [d.id, d.value]));
+    return mockData.destinations
+      .map((d) => ({ ...d, value: valueById[d.id] ?? 0 }))
+      .sort((a, b) => b.value - a.value);
+  }, [year]);
+
   return (
     <div className="animate-fade-up space-y-8 opacity-0 [animation-fill-mode:forwards]">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -176,7 +185,7 @@ export default function Statistics() {
           </p>
           <h2 className="text-3xl font-bold text-gray-900">Статистический эксплорер</h2>
           <p className="max-w-2xl text-gray-600">
-            Фильтр по годам и визуализация структура причин и динамика притока/оттока.
+            Фильтр по годам и визуализация структуры причин и динамики притока/оттока.
           </p>
         </div>
         <div className="glass-panel flex items-center gap-2 p-1">
@@ -197,6 +206,35 @@ export default function Statistics() {
           ))}
         </div>
       </header>
+
+      <section>
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <EuropeMapInteractive
+              selectedYear={Number(year)}
+              onYearChange={(y) => setYear(String(y))}
+              showFlows
+              showLegend
+            />
+          </div>
+          <aside className="space-y-4">
+            <div className="glass-panel p-5">
+              <h3 className="text-sm font-semibold text-sky-800">Подсветка стран</h3>
+              <ul className="mt-3 space-y-2 text-sm text-gray-600">
+                {mapDestinationsForYear.map((d) => (
+                  <li
+                    key={d.id}
+                    className="flex justify-between gap-2 border-b border-sky-100 py-2 last:border-0"
+                  >
+                    <span className="text-gray-900">{d.nameEn}</span>
+                    <span className="font-mono text-sky-600">{d.value.toLocaleString('ru-RU')}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
 
       <section className="glass-panel chart-glow overflow-visible p-5">
         <h3 className="relative z-10 mb-1 text-center text-base font-semibold leading-snug text-gray-900">

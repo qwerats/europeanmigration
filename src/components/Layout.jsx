@@ -3,11 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
 
-const SECTION_IDS = ['intro', 'home', 'geography', 'statistics', 'forecast', 'methodology'];
+const SECTION_IDS = ['intro', 'home', 'statistics', 'forecast', 'methodology'];
 
 const nav = [
   { id: 'home', label: 'Главная' },
-  { id: 'geography', label: 'География' },
   { id: 'statistics', label: 'Статистика' },
   { id: 'forecast', label: 'Прогноз' },
   { id: 'methodology', label: 'ИИ-ассистент' },
@@ -25,6 +24,12 @@ export default function Layout({ children }) {
   const [activeId, setActiveId] = useState('intro');
 
   const isOnePager = pathname === '/';
+
+  useEffect(() => {
+    if (!isOnePager || hash !== '#geography') return undefined;
+    navigate({ pathname: '/', hash: 'statistics' }, { replace: true });
+    return undefined;
+  }, [isOnePager, hash, navigate]);
 
   useEffect(() => {
     if (!isOnePager || !hash) return undefined;

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import { publicUrl } from '../utils/publicUrl';
@@ -18,25 +17,7 @@ const INTRO_BAR_PT = SHOW_SITE_HEADER ? 'pt-[13.5rem]' : 'pt-40';
 
 export default function IntroPage() {
   const navigate = useNavigate();
-  const heroVideoRef = useRef(null);
   const sectionMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
-
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video) return undefined;
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => {
-      if (mq.matches) {
-        video.pause();
-      } else {
-        void video.play().catch(() => {});
-      }
-    };
-    sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
-  }, []);
-
   const goToSection = (id) => {
     if (id === 'intro') {
       navigate({ pathname: '/', hash: '' });
@@ -95,25 +76,24 @@ export default function IntroPage() {
       >
         <div className="absolute inset-0 z-0 bg-[#0a1628]" aria-hidden />
 
-        <div className="pointer-events-none absolute inset-0 z-[1] overflow-hidden" aria-hidden>
-          <video
-            ref={heroVideoRef}
-            className="absolute left-1/2 top-0 h-full min-h-full w-full min-w-full -translate-x-1/2 object-cover object-top"
-            src={publicUrl('intro-hero-bg.mp4')}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          />
+        <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,#eef1f5_0%,#c5d4e8_38%,#1e3a5f_72%,#0a2a61_100%)]" />
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.38] sm:opacity-[0.44]">
+            <img
+              src={publicUrl('branding/eu-map-bg.svg')}
+              alt=""
+              className="max-h-[min(72vh,520px)] w-full max-w-5xl object-contain object-center select-none"
+              draggable={false}
+            />
+          </div>
         </div>
 
         <div
-          className="pointer-events-none absolute inset-0 z-[2] bg-slate-950/28"
+          className="pointer-events-none absolute inset-0 z-[2] bg-slate-950/20"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.1)_38%,rgba(8,28,58,0.38)_72%,rgba(4,18,42,0.55)_100%)]"
+          className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.12)_40%,rgba(6,20,45,0.62)_100%)]"
           aria-hidden
         />
 
