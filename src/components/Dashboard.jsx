@@ -60,10 +60,10 @@ export default function Dashboard() {
           <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-300/25 blur-2xl transition-opacity group-hover:opacity-100" />
           <h3 className="relative text-xs font-medium uppercase tracking-wider text-gray-600">ИИ-ассистент</h3>
           <p className="relative mt-2 text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
-            Полный функционал агента
+            Мониторинг миграции + web chat
           </p>
           <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
-            onSpace · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
+            Встроенный агент · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
           </p>
           <p className="relative mt-2 text-xs text-sky-600">Перейти к чату и аналитике →</p>
         </Link>

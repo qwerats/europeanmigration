@@ -20,6 +20,7 @@ export default function OnePager() {
     <div className="w-full">
       {SECTIONS.map(({ id, tone, Component }) => {
         const isIntro = id === 'intro';
+        const isFirstLight = id === 'home';
         return (
           <section
             key={id}
@@ -27,8 +28,8 @@ export default function OnePager() {
             data-section={id}
             className={
               isIntro
-                ? scrollMt
-                : `${scrollMt} border-t border-sky-100 bg-white px-4 py-12 sm:px-6 lg:px-8`
+                ? `${scrollMt} w-full min-w-0 overflow-x-hidden`
+                : `${scrollMt} ${isFirstLight ? '' : 'border-t border-sky-100'} bg-white px-4 py-12 sm:px-6 lg:px-8`
             }
           >
             {isIntro ? (

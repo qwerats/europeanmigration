@@ -128,6 +128,18 @@ export default function Layout({ children }) {
 
       <main className="w-full max-w-none px-0 py-0">{children}</main>
 
+      <button
+        type="button"
+        onClick={() => navigate('/methodology')}
+        className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-full border border-sky-300 bg-white/95 px-4 py-2 text-sm font-semibold text-sky-800 shadow-lg backdrop-blur transition hover:scale-[1.02] hover:bg-sky-50"
+        aria-label="Открыть ИИ-агента мониторинга"
+      >
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-[10px] font-bold text-white">
+          AI
+        </span>
+        AI-агент
+      </button>
+
       <footer className="mt-0 border-t border-sky-100 py-6 text-center text-xs text-gray-600">
         © {new Date().getFullYear()} Миграционные потоки Европейского союза
       </footer>

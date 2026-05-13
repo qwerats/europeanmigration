@@ -31,7 +31,9 @@ export default function IntroPage() {
   };
 
   return (
-    <section className={`relative ${sectionMinH} w-full overflow-x-hidden bg-[#0a1628] text-slate-900`}>
+    <section
+      className={`relative ${sectionMinH} w-full min-w-0 max-w-none overflow-x-hidden bg-[#0a1628] text-slate-900`}
+    >
       <div
         className={`fixed left-0 right-0 shadow-[0_4px_20px_rgba(0,0,0,0.12)] ${
           SHOW_SITE_HEADER ? 'top-24 z-40' : 'top-0 z-[55]'
@@ -70,19 +72,19 @@ export default function IntroPage() {
       </div>
 
       <div
-        className={`relative flex items-end justify-center overflow-hidden ${INTRO_BAR_PT} ${
+        className={`relative flex w-full min-w-0 items-end justify-center overflow-hidden ${INTRO_BAR_PT} ${
           SHOW_SITE_HEADER ? 'min-h-[calc(100vh-13.5rem)]' : 'min-h-[calc(100vh-8rem)]'
         }`}
       >
         <div className="absolute inset-0 z-0 bg-[#0a1628]" aria-hidden />
 
         <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,#eef1f5_0%,#c5d4e8_38%,#1e3a5f_72%,#0a2a61_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,#0c1f3d_0%,#1a3a63_32%,#1e3a5f_68%,#0a1a32_100%)]" />
           <div className="absolute inset-0 flex items-center justify-center opacity-[0.38] sm:opacity-[0.44]">
             <img
               src={publicUrl('branding/eu-map-bg.svg')}
               alt=""
-              className="max-h-[min(72vh,520px)] w-full max-w-5xl object-contain object-center select-none"
+              className="h-full w-full max-w-none object-cover object-center select-none sm:max-h-[min(72vh,520px)] sm:w-full sm:max-w-5xl sm:object-contain"
               draggable={false}
             />
           </div>
@@ -94,6 +96,10 @@ export default function IntroPage() {
         />
         <div
           className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.12)_40%,rgba(6,20,45,0.62)_100%)]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-28 bg-gradient-to-b from-transparent via-white/10 to-white sm:h-36"
           aria-hidden
         />
 
@@ -109,6 +115,27 @@ export default function IntroPage() {
             Узнать больше
           </button>
         </div>
+
+        <button
+          type="button"
+          onClick={() => goToSection('home')}
+          className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1 text-white animate-pulse drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] transition hover:opacity-100 hover:[animation-play-state:paused] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          aria-label="Прокрутить вниз к разделу Главная"
+        >
+          <svg
+            className="h-7 w-7"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em]">Вниз</span>
+        </button>
       </div>
     </section>
   );
