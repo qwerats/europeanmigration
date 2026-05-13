@@ -1,0 +1,4 @@
+{
+  "name": "europe-migration-dashboard",
+  "install": "npm ci"
+}
