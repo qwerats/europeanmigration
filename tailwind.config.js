@@ -29,6 +29,7 @@ export default {
       animation: {
         'gradient-slow': 'gradient-shift 18s ease infinite',
         'fade-up': 'fade-up 0.65s ease-out forwards',
+        'fade-up-soft': 'fade-up-soft 0.5s ease-out forwards',
         'sky-pulse': 'sky-pulse 4.5s ease-in-out infinite',
       },
       keyframes: {
@@ -39,6 +40,10 @@ export default {
         'fade-up': {
           from: { opacity: '0', transform: 'translateY(14px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        'fade-up-soft': {
+          from: { transform: 'translateY(10px)' },
+          to: { transform: 'translateY(0)' },
         },
         'sky-pulse': {
           '0%, 100%': { opacity: '0.35' },

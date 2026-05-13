@@ -20,7 +20,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="animate-fade-up space-y-10 opacity-0 [animation-fill-mode:forwards]">
+    <div className="animate-fade-up-soft space-y-10 [animation-fill-mode:forwards]">
       <section className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-600">
           Policy dashboard · EU scale

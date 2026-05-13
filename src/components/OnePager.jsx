@@ -6,11 +6,11 @@ import Forecast from './Forecast';
 import AiAssistantPage from './AiAssistantPage';
 
 const SECTIONS = [
-  { id: 'intro', tone: 'dark', Component: IntroPage },
-  { id: 'home', tone: 'light', Component: Dashboard },
-  { id: 'statistics', tone: 'light', Component: Statistics },
-  { id: 'forecast', tone: 'light', Component: Forecast },
-  { id: 'methodology', tone: 'light', Component: AiAssistantPage },
+  { id: 'intro', Component: IntroPage },
+  { id: 'home', Component: Dashboard },
+  { id: 'statistics', Component: Statistics },
+  { id: 'forecast', Component: Forecast },
+  { id: 'methodology', Component: AiAssistantPage },
 ];
 
 export default function OnePager() {
@@ -18,7 +18,7 @@ export default function OnePager() {
 
   return (
     <div className="w-full">
-      {SECTIONS.map(({ id, tone, Component }) => {
+      {SECTIONS.map(({ id, Component }) => {
         const isIntro = id === 'intro';
         const isFirstLight = id === 'home';
         return (
@@ -39,7 +39,6 @@ export default function OnePager() {
                 <Component />
               </div>
             )}
-            {tone === 'light' && id !== 'methodology' ? null : null}
           </section>
         );
       })}

@@ -80,37 +80,29 @@ export default function IntroPage() {
 
         <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
           <div className="absolute inset-0 bg-[linear-gradient(180deg,#0c1f3d_0%,#1a3a63_32%,#1e3a5f_68%,#0a1a32_100%)]" />
-          <div className="absolute inset-0 flex items-center justify-center opacity-[0.38] sm:opacity-[0.44]">
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.34] sm:opacity-[0.4]">
             <img
               src={publicUrl('branding/eu-map-bg.svg')}
               alt=""
-              className="h-full w-full max-w-none object-cover object-center select-none sm:max-h-[min(72vh,520px)] sm:w-full sm:max-w-5xl sm:object-contain"
+              className="h-full min-h-[55%] w-full object-cover object-[center_58%] select-none"
               draggable={false}
             />
           </div>
         </div>
 
         <div
-          className="pointer-events-none absolute inset-0 z-[2] bg-slate-950/20"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 z-[3] bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.12)_40%,rgba(6,20,45,0.62)_100%)]"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[4] h-28 bg-gradient-to-b from-transparent via-white/10 to-white sm:h-36"
+          className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(180deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.08)_45%,rgba(5,18,40,0.55)_100%)]"
           aria-hidden
         />
 
-        <div className="relative z-20 mb-16 flex max-w-5xl flex-col items-center px-4 text-center text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.35)]">
-          <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+        <div className="relative z-20 mb-20 flex max-w-5xl flex-col items-center px-4 text-center text-white">
+          <h2 className="text-balance text-2xl font-bold leading-tight tracking-tight drop-shadow-md sm:text-4xl md:text-5xl">
             Анализ миграционных потоков в Европейском союзе
           </h2>
           <button
             type="button"
             onClick={() => goToSection('home')}
-            className="mt-6 inline-flex cursor-pointer rounded-md border border-sky-200 bg-[#1c4fa8] px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#215ec5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="mt-6 inline-flex cursor-pointer rounded-lg bg-[#1c4fa8] px-7 py-3 text-sm font-semibold text-white shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition hover:bg-[#215ec5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
           >
             Узнать больше
           </button>
@@ -119,22 +111,21 @@ export default function IntroPage() {
         <button
           type="button"
           onClick={() => goToSection('home')}
-          className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1 text-white animate-pulse drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)] transition hover:opacity-100 hover:[animation-play-state:paused] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white animate-pulse drop-shadow-[0_0_14px_rgba(255,255,255,0.55)] transition hover:animate-none hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           aria-label="Прокрутить вниз к разделу Главная"
         >
           <svg
-            className="h-7 w-7"
+            className="h-9 w-9 stroke-[2.5]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
             aria-hidden
           >
             <path d="M6 9l6 6 6-6" />
           </svg>
-          <span className="text-xs font-semibold uppercase tracking-[0.2em]">Вниз</span>
+          <span className="text-sm font-bold uppercase tracking-[0.28em]">Вниз</span>
         </button>
       </div>
     </section>
