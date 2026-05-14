@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export default function IntroNavPage({ title }) {
+export default function IntroNavPage({ title, children }) {
   const navigate = useNavigate();
 
   const goIntro = () => {
@@ -12,6 +12,7 @@ export default function IntroNavPage({ title }) {
     <div className="mx-auto flex min-h-[calc(100vh-10rem)] max-w-2xl flex-col px-4 py-12 text-gray-900">
       <div className="flex-1">
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">{title}</h1>
+        {children}
       </div>
 
       <div className="flex justify-center pb-10 pt-6">

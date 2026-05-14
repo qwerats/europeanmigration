@@ -6,6 +6,7 @@ import Statistics from './components/Statistics';
 import AiAssistantPage from './components/AiAssistantPage';
 import Forecast from './components/Forecast';
 import IntroNavPage from './components/IntroNavPage';
+import ContactPage from './components/ContactPage';
 
 export default function App() {
   return (
@@ -13,7 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<OnePager />} />
         <Route path="/about" element={<IntroNavPage title="About" />} />
-        <Route path="/contact" element={<IntroNavPage title="Contact" />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/resources" element={<IntroNavPage title="Resources" />} />
         <Route path="/home" element={<Dashboard />} />
         <Route path="/geography" element={<Navigate to="/statistics" replace />} />
