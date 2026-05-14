@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { playChartClickSound } from '../utils/chartClickSound.js';
 import {
   PieChart,
   Pie,
@@ -240,7 +241,7 @@ export default function Statistics() {
         <h3 className="relative z-10 mb-1 text-center text-base font-semibold leading-snug text-gray-900">
           Количество мигрантов в ЕС
         </h3>
-        <div className="relative z-0 mt-4 h-[420px] w-full min-h-0">
+        <div className="relative z-0 mt-4 h-[420px] w-full min-h-0" onClick={() => playChartClickSound()} role="presentation">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={euForeignBornByYear} margin={{ top: 16, right: 20, left: 16, bottom: 36 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.45)" />
@@ -299,10 +300,7 @@ export default function Statistics() {
                 strokeWidth={2.5}
                 dot={{ r: 4, fill: '#7c3aed', stroke: '#fff', strokeWidth: 1.5 }}
                 activeDot={{ r: 6 }}
-                isAnimationActive
-                animationBegin={120}
-                animationDuration={2400}
-                animationEasing="ease-in-out"
+                isAnimationActive={false}
               >
                 <LabelList dataKey="millions" content={renderForeignBornValueLabel} />
               </Line>
@@ -312,32 +310,34 @@ export default function Statistics() {
         </div>
 
         <h3 className="relative z-10 mt-10 text-center text-base font-semibold leading-snug text-gray-900">
-          Страны с наибольшим количеством мигрантов
+          Динамика численности мигрантов относительно общего роста
         </h3>
-        <div className="relative z-0 mt-4 h-[440px] w-full min-h-0">
+        <div className="relative z-0 mt-4 h-[440px] w-full min-h-0" onClick={() => playChartClickSound()} role="presentation">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={euBigFiveByYear} margin={{ top: 16, right: 20, left: 16, bottom: 52 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.45)" />
               <ReferenceLine
-                x="2015"
+                x={2015}
                 stroke="#9ca3af"
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
               <ReferenceLine
-                x="2020"
+                x={2020}
                 stroke="#9ca3af"
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
               <ReferenceLine
-                x="2022"
+                x={2022}
                 stroke="#9ca3af"
                 strokeWidth={1}
                 strokeDasharray="4 4"
               />
               <XAxis
+                type="number"
                 dataKey="year"
+                domain={[2010, 2025]}
                 tick={{ fill: '#475569', fontSize: 11 }}
                 axisLine={{ stroke: '#cbd5e1' }}
                 tickLine={{ stroke: '#cbd5e1' }}
@@ -377,10 +377,7 @@ export default function Statistics() {
                 strokeWidth={2.2}
                 dot={{ r: 3.5, fill: '#f97316', stroke: '#fff', strokeWidth: 1.2 }}
                 activeDot={{ r: 5 }}
-                isAnimationActive
-                animationBegin={80}
-                animationDuration={1800}
-                animationEasing="ease-in-out"
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -390,10 +387,7 @@ export default function Statistics() {
                 strokeWidth={2.2}
                 dot={{ r: 3.5, fill: '#1e3a8f', stroke: '#fff', strokeWidth: 1.2 }}
                 activeDot={{ r: 5 }}
-                isAnimationActive
-                animationBegin={120}
-                animationDuration={1800}
-                animationEasing="ease-in-out"
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -403,10 +397,7 @@ export default function Statistics() {
                 strokeWidth={2.2}
                 dot={{ r: 3.5, fill: '#0f766e', stroke: '#fff', strokeWidth: 1.2 }}
                 activeDot={{ r: 5 }}
-                isAnimationActive
-                animationBegin={160}
-                animationDuration={1800}
-                animationEasing="ease-in-out"
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -416,10 +407,7 @@ export default function Statistics() {
                 strokeWidth={2.2}
                 dot={{ r: 3.5, fill: '#e11d48', stroke: '#fff', strokeWidth: 1.2 }}
                 activeDot={{ r: 5 }}
-                isAnimationActive
-                animationBegin={200}
-                animationDuration={1800}
-                animationEasing="ease-in-out"
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -429,10 +417,7 @@ export default function Statistics() {
                 strokeWidth={2.2}
                 dot={{ r: 3.5, fill: '#78716c', stroke: '#fff', strokeWidth: 1.2 }}
                 activeDot={{ r: 5 }}
-                isAnimationActive
-                animationBegin={240}
-                animationDuration={1800}
-                animationEasing="ease-in-out"
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -446,7 +431,7 @@ export default function Statistics() {
         <section className="glass-panel chart-glow p-5">
           <h3 className="text-sm font-semibold text-sky-800">Причины миграции</h3>
           <p className="mt-1 text-xs text-gray-500"> </p>
-          <div className="mt-4 h-[300px] w-full">
+          <div className="mt-4 h-[300px] w-full" onClick={() => playChartClickSound()} role="presentation">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -459,9 +444,7 @@ export default function Statistics() {
                   innerRadius={58}
                   outerRadius={96}
                   paddingAngle={2}
-                  isAnimationActive
-                  animationDuration={900}
-                  animationEasing="ease-out"
+                  isAnimationActive={false}
                   labelLine={false}
                   label={renderPieLabel}
                 >
@@ -480,7 +463,7 @@ export default function Statistics() {
       <section className="glass-panel chart-glow p-5">
         <h3 className="text-sm font-semibold text-sky-800">Динамика роста совокупного притока</h3>
         <p className="mt-1 text-xs text-gray-500"> </p>
-        <div className="mt-4 h-[320px] w-full">
+        <div className="mt-4 h-[320px] w-full" onClick={() => playChartClickSound()} role="presentation">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={lineData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(14,165,233,0.2)" />
@@ -504,6 +487,7 @@ export default function Statistics() {
                 strokeWidth={3}
                 dot={{ r: 5, fill: '#ffffff', stroke: '#0ea5e9', strokeWidth: 2 }}
                 activeDot={{ r: 7 }}
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -515,7 +499,7 @@ export default function Statistics() {
         <p className="mt-1 text-xs text-gray-500">
           Синяя линия - приток в ЕС, желтая линия - отток в страны вне ЕС
         </p>
-        <div className="mt-4 h-[340px] w-full">
+        <div className="mt-4 h-[340px] w-full" onClick={() => playChartClickSound()} role="presentation">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={inflowOutflowData} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="4 4" stroke="rgba(71,85,105,0.35)" />
@@ -545,6 +529,7 @@ export default function Statistics() {
                 strokeWidth={3}
                 dot={{ r: 4, fill: '#1d4ed8' }}
                 activeDot={{ r: 6 }}
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -554,6 +539,7 @@ export default function Statistics() {
                 strokeWidth={3}
                 dot={{ r: 4, fill: '#ca8a04' }}
                 activeDot={{ r: 6 }}
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>

@@ -1,18 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import mockData from '../data/mockData.json';
 import { publicUrl } from '../utils/publicUrl';
-import KPICard from './KPICard';
+import EUMigrationTrendCard from './EUMigrationTrendCard';
+import EuBigFiveMigrantsLineCompact from './EuBigFiveMigrantsLineCompact';
+import TopMigrantsByCountryBar from './TopMigrantsByCountryBar';
 
 export default function Dashboard() {
   const [showAvatarPrompt, setShowAvatarPrompt] = useState(false);
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
-  const reasons = mockData.reasons;
-  const workReason = useMemo(() => reasons.find((r) => r.key === 'work'), [reasons]);
-  const topDestination = useMemo(
-    () => mockData.destinations.reduce((max, curr) => (curr.value > max.value ? curr : max), mockData.destinations[0]),
-    []
-  );
 
   useEffect(() => {
     const timerId = window.setTimeout(() => setShowAvatarPrompt(true), 450);
@@ -21,52 +16,40 @@ export default function Dashboard() {
 
   return (
     <div className="animate-fade-up-soft space-y-10 [animation-fill-mode:forwards]">
-      <section className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-600">
-          Policy dashboard · EU scale
-        </p>
+      <section className="text-center">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Панель миграционных потоков Европы
+          Миграционный дэшборд
         </h2>
-        <p className="max-w-3xl text-base leading-relaxed text-gray-600">
-          Аналитика миграционных потоков Европы за период 2021-2024 гг.
-        </p>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <KPICard
-          title="Иммиграция в ЕС в 2022 г. достигла рекорда"
-          value="5,4 млн"
-          subtitle="По данным data-source Eurostat 2026"
-          delay={0}
-        />
-        <KPICard
-          title="Топ страна назначения за период"
-          value={topDestination.name}
-          subtitle={`${topDestination.shareOfTotalPct.toFixed(2)}% от общего числа мигрантов`}
-          delay={80}
-        />
-        <KPICard
-          title="Основная причина"
-          value={workReason ? `${workReason.label} · ${workReason.percent}%` : 'Работа'}
-          subtitle="Доминирующая категория в структуре причин (mock)"
-          delay={160}
-        />
-        <Link
-          to="/methodology"
-          className="glass-panel chart-glow group relative flex min-h-[140px] animate-fade-up flex-col justify-center overflow-hidden border-l-4 border-l-sky-500 p-5 opacity-0 transition-transform duration-300 [animation-fill-mode:forwards] hover:scale-[1.02] hover:border-sky-300"
-          style={{ animationDelay: '240ms' }}
-        >
-          <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-300/25 blur-2xl transition-opacity group-hover:opacity-100" />
-          <h3 className="relative text-xs font-medium uppercase tracking-wider text-gray-600">ИИ-ассистент</h3>
-          <p className="relative mt-2 text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
-            Мониторинг миграции + web chat
-          </p>
-          <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
-            Встроенный агент · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
-          </p>
-          <p className="relative mt-2 text-xs text-sky-600">Перейти к чату и аналитике →</p>
-        </Link>
+      <section className="space-y-6">
+        <EUMigrationTrendCard />
+        <p className="mx-auto max-w-4xl px-4 py-6 text-left text-xl font-bold leading-relaxed text-gray-900 sm:px-6 sm:py-8 sm:text-2xl sm:leading-snug">
+          Германия остаётся лидером по привлечению мигрантов на протяжении 10 лет (с 2010 по 2015).
+        </p>
+        <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
+          <div className="min-w-0">
+            <TopMigrantsByCountryBar />
+          </div>
+          <div className="min-w-0">
+            <EuBigFiveMigrantsLineCompact />
+          </div>
+          <Link
+            to="/methodology"
+            className="glass-panel chart-glow group relative flex min-h-[140px] animate-fade-up flex-col justify-center overflow-hidden border-l-4 border-l-sky-500 p-5 opacity-0 transition-transform duration-300 [animation-fill-mode:forwards] hover:scale-[1.02] hover:border-sky-300 sm:col-span-2"
+            style={{ animationDelay: '160ms' }}
+          >
+            <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-300/25 blur-2xl transition-opacity group-hover:opacity-100" />
+            <h3 className="relative text-xs font-medium uppercase tracking-wider text-gray-600">ИИ-ассистент</h3>
+            <p className="relative mt-2 text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
+              Мониторинг миграции + web chat
+            </p>
+            <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
+              Встроенный агент · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
+            </p>
+            <p className="relative mt-2 text-xs text-sky-600">Перейти к чату и аналитике →</p>
+          </Link>
+        </div>
       </section>
 
       <section>

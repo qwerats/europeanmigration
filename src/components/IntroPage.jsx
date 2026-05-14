@@ -1,6 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import { publicUrl } from '../utils/publicUrl';
+import { attachParticleNetwork } from '../utils/particleNetworkCanvas.js';
 
 const INTRO_LINKS = [
   { label: 'Home', scrollToId: 'intro' },
@@ -17,6 +19,13 @@ const INTRO_BAR_PT = SHOW_SITE_HEADER ? 'pt-[13.5rem]' : 'pt-40';
 
 export default function IntroPage() {
   const navigate = useNavigate();
+  const particleCanvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = particleCanvasRef.current;
+    if (!canvas) return undefined;
+    return attachParticleNetwork(canvas);
+  }, []);
   const sectionMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
   const heroMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
   const goToSection = (id) => {
@@ -73,9 +82,14 @@ export default function IntroPage() {
       </div>
 
       <div
-        className={`relative flex w-full min-w-0 items-end justify-center overflow-hidden ${INTRO_BAR_PT} ${heroMinH}`}
+        className={`hero flex w-full min-w-0 items-end justify-center ${INTRO_BAR_PT} ${heroMinH}`}
       >
-        <div className="absolute inset-0 z-0 bg-[#0a1a32]" aria-hidden />
+        <canvas
+          id="particleCanvas"
+          ref={particleCanvasRef}
+          className="pointer-events-none"
+          aria-hidden
+        />
 
         <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
           <div className="absolute inset-0 bg-[linear-gradient(180deg,#0c1f3d_0%,#1a3a63_32%,#1e3a5f_68%,#0a1a32_100%)]" />

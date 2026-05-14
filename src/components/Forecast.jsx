@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { playChartClickSound } from '../utils/chartClickSound.js';
 import {
   LineChart,
   Line,
@@ -87,7 +88,7 @@ export default function Forecast() {
       </header>
 
       <section className="glass-panel chart-glow p-5">
-        <div className="h-[420px] w-full">
+        <div className="h-[420px] w-full" onClick={() => playChartClickSound()} role="presentation">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 8, right: 24, left: 4, bottom: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(14,165,233,0.2)" />
@@ -126,6 +127,7 @@ export default function Forecast() {
                 strokeWidth={2.5}
                 dot={{ r: 4, fill: COLORS.immFact }}
                 connectNulls={false}
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -135,6 +137,7 @@ export default function Forecast() {
                 strokeWidth={2.5}
                 dot={{ r: 4, fill: COLORS.emiFact }}
                 connectNulls={false}
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -144,6 +147,7 @@ export default function Forecast() {
                 strokeWidth={2}
                 strokeDasharray="6 6"
                 dot={false}
+                isAnimationActive={false}
               />
               <Line
                 type="monotone"
@@ -153,6 +157,7 @@ export default function Forecast() {
                 strokeWidth={2}
                 strokeDasharray="6 6"
                 dot={false}
+                isAnimationActive={false}
               />
             </LineChart>
           </ResponsiveContainer>
