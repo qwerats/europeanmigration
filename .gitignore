@@ -4,6 +4,9 @@ node_modules/
 # Build
 dist/
 
+# Vercel CLI local link (CI creates this in the runner; do not commit)
+.vercel/
+
 # Local env
 .env
 .env.local
