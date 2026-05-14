@@ -29,12 +29,15 @@ const X_TICKS_LOUPE = euBigFiveByYear.map((d) => d.year);
 const Y_TICKS_MINI = [4, 8, 12, 16, 20, 24];
 const Y_TICKS_LOUPE = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
 
-/** Как у «Тренды»: компактная высота → развёрнутая (широкая по горизонтали за счёт breakout). */
-const MINI_H = 330;
-const LOUPE_CHART_H = 400;
+/** Компактный режим. Развёрнутый: высота от ширины (не плоский «ландшафт»). */
+const MINI_H = 430;
+const LOUPE_H_MIN = 625;
+const LOUPE_H_MAX = 940;
+/** Отношение высоты к ширине в loupe — чем больше, тем «выше» график. */
+const LOUPE_H_RATIO = 0.68;
 
-const MARGIN_MINI = { top: 6, right: 10, left: 16, bottom: 48 };
-const MARGIN_LOUPE = { top: 16, right: 28, left: 28, bottom: 72 };
+const MARGIN_MINI = { top: 6, right: 10, left: 16, bottom: 52 };
+const MARGIN_LOUPE = { top: 16, right: 28, left: 28, bottom: 82 };
 
 function toggleLoupeKey(e, setLoupe) {
   if (e.key === 'Enter' || e.key === ' ') {
@@ -184,7 +187,9 @@ export default function EuBigFiveMigrantsLineCompact() {
   const measureRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(520);
 
-  const chartHeight = loupe ? LOUPE_CHART_H : MINI_H;
+  const chartHeight = loupe
+    ? Math.min(LOUPE_H_MAX, Math.max(LOUPE_H_MIN, Math.round(chartWidth * LOUPE_H_RATIO)))
+    : MINI_H;
 
   useLayoutEffect(() => {
     const el = measureRef.current;
@@ -235,8 +240,8 @@ export default function EuBigFiveMigrantsLineCompact() {
   return (
     <article
       className={[
-        'relative overflow-visible glass-panel chart-glow flex min-h-[360px] flex-col p-5 sm:min-h-[400px]',
-        loupe ? 'z-30' : '',
+        'relative overflow-visible glass-panel chart-glow flex flex-col p-5',
+        loupe ? 'z-30 min-h-[min(96vh,1140px)]' : 'min-h-[420px] sm:min-h-[460px]',
       ].join(' ')}
     >
       <h3 className="text-center text-base font-bold leading-snug text-black sm:text-lg">

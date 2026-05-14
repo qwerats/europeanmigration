@@ -69,6 +69,15 @@ export function sanitizeMessages(messages) {
     .map((m) => ({ role: m.role, content: m.content.slice(0, 8000) }));
 }
 
+/** Короче контекст для локальной Ollama — меньше токенов и быстрее ответ. */
+export function sanitizeMessagesForOllama(messages) {
+  if (!Array.isArray(messages)) return [];
+  return messages
+    .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+    .slice(-6)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 3500) }));
+}
+
 export function extractOutputText(responseJson) {
   if (typeof responseJson?.output_text === 'string' && responseJson.output_text.trim()) {
     return responseJson.output_text.trim();
@@ -98,7 +107,7 @@ function stripHtml(rawHtml, maxLen = 3200) {
     .slice(0, maxLen);
 }
 
-async function fetchSourceSnapshot(url, fetchImpl) {
+async function fetchSourceSnapshot(url, fetchImpl, textMaxLen = 1200) {
   try {
     const response = await fetchImpl(url, {
       headers: {
@@ -111,7 +120,7 @@ async function fetchSourceSnapshot(url, fetchImpl) {
     const html = await response.text();
     const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
     const title = titleMatch ? stripHtml(titleMatch[1], 180) : 'Без заголовка';
-    const text = stripHtml(html, 2200);
+    const text = stripHtml(html, textMaxLen);
     return `Источник: ${url}\nЗаголовок: ${title}\nФрагмент: ${text}`;
   } catch (err) {
     return `Источник: ${url}\nОшибка: ${err?.message || 'не удалось получить данные'}`;
@@ -131,8 +140,94 @@ async function collectPrioritySources(fetchImpl) {
   return snapshots.join('\n\n');
 }
 
+/** Кэш HTML-снапшотов между запросами (не дергать 6 сайтов на каждый вопрос). */
+let sourcesCache = { digest: '', expiresAt: 0 };
+
+function getSourcesCacheTtlMs() {
+  const raw = process.env.MIGRATION_SOURCES_CACHE_MS;
+  const n = raw ? Number(raw) : NaN;
+  if (Number.isFinite(n) && n >= 30_000) return n;
+  return 15 * 60 * 1000;
+}
+
+async function getCachedPrioritySources(fetchImpl) {
+  const now = Date.now();
+  if (sourcesCache.digest && now < sourcesCache.expiresAt) {
+    return sourcesCache.digest;
+  }
+  const digest = await collectPrioritySources(fetchImpl);
+  sourcesCache = { digest, expiresAt: now + getSourcesCacheTtlMs() };
+  return digest;
+}
+
+const OLLAMA_SOURCES_DIGEST_MAX = 7000;
+
+function buildOllamaUserPrompt(cleanMessages, sourcesDigest, today) {
+  const latestUserPrompt = cleanMessages.filter((m) => m.role === 'user').at(-1)?.content || '';
+  let digest = sourcesDigest;
+  if (digest.length > OLLAMA_SOURCES_DIGEST_MAX) {
+    digest = `${digest.slice(0, OLLAMA_SOURCES_DIGEST_MAX)}\n\n[…снапшоты источников сокращены для скорости]`;
+  }
+  return [
+    `Текущая дата: ${today}.`,
+    AGENT_SYSTEM_PROMPT,
+    'Ниже снапшоты приоритетных источников (могут быть кэшированы несколько минут; если недоступны — отмечено в тексте):',
+    digest,
+    'История диалога:',
+    ...cleanMessages.map((m) => `${m.role === 'assistant' ? 'assistant' : 'user'}: ${m.content}`),
+    `Текущий запрос пользователя: ${latestUserPrompt}`,
+  ].join('\n\n');
+}
+
+async function* parseOllamaChatStream(response) {
+  if (!response.ok) {
+    let msg = await response.text();
+    try {
+      const j = JSON.parse(msg);
+      msg = j?.error || msg;
+    } catch {
+      /* keep text */
+    }
+    const err = new Error(msg || 'Ollama error');
+    err.status = response.status;
+    throw err;
+  }
+  const reader = response.body?.getReader?.();
+  if (!reader) {
+    throw new Error('Потоковое тело ответа Ollama недоступно.');
+  }
+  const dec = new TextDecoder();
+  let buf = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let nl;
+    while ((nl = buf.indexOf('\n')) >= 0) {
+      const line = buf.slice(0, nl).trim();
+      buf = buf.slice(nl + 1);
+      if (!line) continue;
+      let json;
+      try {
+        json = JSON.parse(line);
+      } catch {
+        continue;
+      }
+      if (json.error) {
+        const msg = typeof json.error === 'string' ? json.error : json.error?.message || 'Ошибка Ollama';
+        const err = new Error(msg);
+        err.status = response.status;
+        throw err;
+      }
+      if (json.done) return;
+      const c = json.message?.content;
+      if (typeof c === 'string' && c.length) yield c;
+    }
+  }
+}
+
 async function runWithOllama(messages, options = {}) {
-  const cleanMessages = sanitizeMessages(messages);
+  const cleanMessages = sanitizeMessagesForOllama(messages);
   if (!cleanMessages.length) {
     const err = new Error('Пустой диалог. Передайте messages[].');
     err.status = 400;
@@ -142,19 +237,9 @@ async function runWithOllama(messages, options = {}) {
   const fetchImpl = options.fetchImpl || fetch;
   const ollamaBaseUrl = options.ollamaBaseUrl || process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
   const ollamaModel = options.ollamaModel || process.env.OLLAMA_MODEL || 'llama3.1:8b';
-  const sourcesDigest = await collectPrioritySources(fetchImpl);
+  const sourcesDigest = await getCachedPrioritySources(fetchImpl);
   const today = new Date().toISOString().slice(0, 10);
-  const latestUserPrompt = cleanMessages.filter((m) => m.role === 'user').at(-1)?.content || '';
-
-  const finalPrompt = [
-    `Текущая дата: ${today}.`,
-    AGENT_SYSTEM_PROMPT,
-    'Ниже свежие снапшоты источников (если какие-то недоступны, это уже отмечено):',
-    sourcesDigest,
-    'История диалога:',
-    ...cleanMessages.map((m) => `${m.role === 'assistant' ? 'assistant' : 'user'}: ${m.content}`),
-    `Текущий запрос пользователя: ${latestUserPrompt}`,
-  ].join('\n\n');
+  const finalPrompt = buildOllamaUserPrompt(cleanMessages, sourcesDigest, today);
 
   let response;
   try {
@@ -174,6 +259,7 @@ async function runWithOllama(messages, options = {}) {
         stream: false,
         options: {
           temperature: 0.2,
+          num_predict: 4096,
         },
       }),
     });
@@ -203,6 +289,55 @@ async function runWithOllama(messages, options = {}) {
   }
 
   return reply;
+}
+
+/** Поток токенов для NDJSON-ответа dev-сервера (только Ollama). */
+export async function* streamOllamaMigrationAgent(messages, options = {}) {
+  const cleanMessages = sanitizeMessagesForOllama(messages);
+  if (!cleanMessages.length) {
+    const err = new Error('Пустой диалог. Передайте messages[].');
+    err.status = 400;
+    throw err;
+  }
+
+  const fetchImpl = options.fetchImpl || fetch;
+  const ollamaBaseUrl = options.ollamaBaseUrl || process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
+  const ollamaModel = options.ollamaModel || process.env.OLLAMA_MODEL || 'llama3.1:8b';
+  const sourcesDigest = await getCachedPrioritySources(fetchImpl);
+  const today = new Date().toISOString().slice(0, 10);
+  const finalPrompt = buildOllamaUserPrompt(cleanMessages, sourcesDigest, today);
+
+  let response;
+  try {
+    response = await fetchImpl(`${ollamaBaseUrl.replace(/\/$/, '')}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: ollamaModel,
+        messages: [
+          {
+            role: 'user',
+            content: finalPrompt,
+          },
+        ],
+        stream: true,
+        options: {
+          temperature: 0.2,
+          num_predict: 4096,
+        },
+      }),
+    });
+  } catch {
+    const err = new Error(
+      `Не удалось подключиться к Ollama (${ollamaBaseUrl}). Установите Ollama, выполните "ollama pull ${ollamaModel}" и запустите "ollama serve".`
+    );
+    err.status = 500;
+    throw err;
+  }
+
+  yield* parseOllamaChatStream(response);
 }
 
 async function runWithOpenAI(messages, options = {}) {

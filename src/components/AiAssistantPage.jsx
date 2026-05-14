@@ -36,25 +36,95 @@ export default function AiAssistantPage() {
       const response = await fetch('/api/migration-agent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ messages: nextMessages, stream: true }),
       });
 
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        const fallback =
-          response.status === 404
-            ? 'Локальный API не найден. Перезапустите dev-сервер после обновления конфигурации.'
-            : 'Не удалось получить ответ от AI-агента.';
-        throw new Error(payload?.error || fallback);
-      }
+      const contentType = response.headers.get('content-type') || '';
 
-      const assistantText = payload?.reply?.trim();
-      if (!assistantText) {
-        throw new Error('AI-агент вернул пустой ответ.');
-      }
+      if (contentType.includes('ndjson')) {
+        if (!response.ok) {
+          throw new Error('Не удалось открыть поток ответа агента.');
+        }
+        setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
-      setMessages((prev) => [...prev, { role: 'assistant', content: assistantText }]);
+        const reader = response.body?.getReader();
+        if (!reader) {
+          throw new Error('Браузер не поддерживает потоковое чтение ответа.');
+        }
+        const dec = new TextDecoder();
+        let buf = '';
+        let gotToken = false;
+        let streamEnded = false;
+
+        while (!streamEnded) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          for (;;) {
+            const nl = buf.indexOf('\n');
+            if (nl < 0) break;
+            const line = buf.slice(0, nl).trim();
+            buf = buf.slice(nl + 1);
+            if (!line) continue;
+            let row;
+            try {
+              row = JSON.parse(line);
+            } catch {
+              continue;
+            }
+            if (row.type === 'error') {
+              throw new Error(row.message || 'Ошибка потока агента.');
+            }
+            if (row.type === 'done') {
+              streamEnded = true;
+              break;
+            }
+            if (row.type === 'token' && typeof row.text === 'string' && row.text.length) {
+              gotToken = true;
+              const chunk = row.text;
+              setMessages((prev) => {
+                const out = [...prev];
+                const i = out.length - 1;
+                if (out[i]?.role === 'assistant') {
+                  out[i] = { ...out[i], content: out[i].content + chunk };
+                }
+                return out;
+              });
+            }
+          }
+        }
+
+        if (!gotToken) {
+          setMessages((prev) => {
+            const last = prev[prev.length - 1];
+            if (last?.role === 'assistant' && !last.content.trim()) return prev.slice(0, -1);
+            return prev;
+          });
+          throw new Error('AI-агент вернул пустой ответ.');
+        }
+      } else {
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          const fallback =
+            response.status === 404
+              ? 'Локальный API не найден. Перезапустите dev-сервер после обновления конфигурации.'
+              : 'Не удалось получить ответ от AI-агента.';
+          throw new Error(payload?.error || fallback);
+        }
+
+        const assistantText = payload?.reply?.trim();
+        if (!assistantText) {
+          throw new Error('AI-агент вернул пустой ответ.');
+        }
+
+        setMessages((prev) => [...prev, { role: 'assistant', content: assistantText }]);
+      }
     } catch (err) {
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        if (last?.role === 'assistant' && !last.content.trim()) return prev.slice(0, -1);
+        return prev;
+      });
       setError(err?.message || 'Ошибка запроса к AI-агенту.');
     } finally {
       setIsLoading(false);
@@ -72,9 +142,12 @@ export default function AiAssistantPage() {
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-600">ИИ-ассистент</p>
         <h2 className="text-3xl font-bold text-gray-900">MigrationMonitor EU · Web Intelligence Agent</h2>
         <p className="max-w-4xl text-gray-600">
-          Агент работает как чат: ищет обновления в официальных источниках, выделяет метрики и формирует
-          рекомендации по обновлению аналитики. По умолчанию используется локальный Ollama (без оплаты):
-          сначала выполните <code>ollama pull llama3.1:8b</code>, затем запустите <code>ollama serve</code>.
+          Агент работает как чат: при локальном Ollama ответ идёт{' '}
+          <span className="font-medium text-sky-800">потоком</span>, снапшоты сайтов Eurostat/IOM и др.{' '}
+          <span className="font-medium text-sky-800">кэшируются на 15 минут</span> (переменная{' '}
+          <code className="rounded bg-slate-100 px-1">MIGRATION_SOURCES_CACHE_MS</code>). По умолчанию — Ollama:{' '}
+          <code className="rounded bg-slate-100 px-1">ollama pull llama3.1:8b</code>, затем{' '}
+          <code className="rounded bg-slate-100 px-1">ollama serve</code>.
         </p>
       </header>
 
@@ -112,7 +185,7 @@ export default function AiAssistantPage() {
               </article>
             );
           })}
-          {isLoading ? (
+          {isLoading && messages[messages.length - 1]?.role !== 'assistant' ? (
             <div className="mr-auto max-w-[95%] rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 shadow-sm">
               Анализирую источники и формирую ответ...
             </div>
