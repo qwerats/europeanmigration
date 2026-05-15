@@ -3,12 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import { publicUrl } from '../utils/publicUrl';
 import { attachParticleNetwork } from '../utils/particleNetworkCanvas.js';
-
+import SiteMapBar from './SiteMapBar';
 const INTRO_LINKS = [
-  { label: 'Home', scrollToId: 'intro' },
-  { label: 'About', to: '/about' },
-  { label: 'Contact', to: '/contact' },
-  { label: 'Resources', to: '/resources' },
+  { label: 'Домой', scrollToId: 'intro' },
+  { label: 'О сайте', to: '/about' },
+  { label: 'Контакты', to: '/contact' },
+  { label: 'Источники', to: '/resources' },
 ];
 
 const linkClass =
@@ -77,6 +77,7 @@ export default function IntroPage() {
                 </Link>
               )
             )}
+            <SiteMapBar linkClass={linkClass} />
           </div>
         </nav>
       </div>
@@ -114,7 +115,7 @@ export default function IntroPage() {
           </h2>
           <button
             type="button"
-            onClick={() => goToSection('home')}
+            onClick={() => goToSection('introduction')}
             className="mt-6 inline-flex cursor-pointer rounded-lg bg-[#1c4fa8] px-7 py-3 text-sm font-semibold text-white shadow-[0_12px_40px_rgba(0,0,0,0.35)] transition hover:bg-[#215ec5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
           >
             Узнать больше
@@ -123,9 +124,9 @@ export default function IntroPage() {
 
         <button
           type="button"
-          onClick={() => goToSection('home')}
+          onClick={() => goToSection('introduction')}
           className="absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-1.5 text-white animate-pulse drop-shadow-[0_0_14px_rgba(255,255,255,0.55)] transition hover:animate-none hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:bottom-4"
-          aria-label="Прокрутить вниз к разделу Главная"
+          aria-label="Прокрутить вниз к разделу Вступление"
         >
           <svg
             className="h-9 w-9 stroke-[2.5]"

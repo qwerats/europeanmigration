@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { publicUrl } from '../utils/publicUrl';
 import EUMigrationTrendCard from './EUMigrationTrendCard';
+import EuPopulationProjectionCard from './EuPopulationProjectionCard';
+import MediterraneanRoutesStackedBar from './MediterraneanRoutesStackedBar';
 import EuBigFiveMigrantsLineCompact from './EuBigFiveMigrantsLineCompact';
 import TopMigrantsByCountryBar from './TopMigrantsByCountryBar';
 
@@ -16,16 +18,28 @@ export default function Dashboard() {
 
   return (
     <div className="animate-fade-up-soft space-y-10 [animation-fill-mode:forwards]">
-      <section className="text-center">
+      <section className="w-full space-y-5 text-center">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Миграционный дэшборд
         </h2>
+        <div className="glass-panel w-full rounded-2xl border border-sky-200/90 border-l-4 border-l-sky-500 px-6 py-6 text-left shadow-[0_8px_30px_rgba(14,165,233,0.12)] sm:px-8 sm:py-7">
+          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700">Определение</p>
+          <p className="mt-3 text-sm leading-relaxed text-gray-700 sm:text-base">
+            <span className="font-semibold text-gray-900">Мигрант</span> — любое лицо, которое перемещается
+            через международную границу или внутри государства и покинуло место своего обычного жительства,
+            независимо от юридического статуса лица; характера перемещения (добровольно / недобровольно);
+            продолжительности пребывания.
+          </p>
+          <p className="mt-3 text-xs text-slate-500 sm:text-sm">Источник: ООН</p>
+        </div>
       </section>
 
       <section className="space-y-6">
         <EUMigrationTrendCard />
+        <EuPopulationProjectionCard />
+        <MediterraneanRoutesStackedBar />
         <p className="mx-auto max-w-4xl px-4 py-6 text-left text-xl font-bold leading-relaxed text-gray-900 sm:px-6 sm:py-8 sm:text-2xl sm:leading-snug">
-          Германия остаётся лидером по привлечению мигрантов на протяжении 10 лет (с 2010 по 2015).
+          Германия остаётся лидером по привлечению мигрантов на протяжении 10 лет (с 2010 по 2025).
         </p>
         <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
           <div className="min-w-0">
@@ -34,33 +48,23 @@ export default function Dashboard() {
           <div className="min-w-0">
             <EuBigFiveMigrantsLineCompact />
           </div>
-          <Link
-            to="/methodology"
-            className="glass-panel chart-glow group relative flex min-h-[140px] animate-fade-up flex-col justify-center overflow-hidden border-l-4 border-l-sky-500 p-5 opacity-0 transition-transform duration-300 [animation-fill-mode:forwards] hover:scale-[1.02] hover:border-sky-300 sm:col-span-2"
-            style={{ animationDelay: '160ms' }}
-          >
-            <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-300/25 blur-2xl transition-opacity group-hover:opacity-100" />
-            <h3 className="relative text-xs font-medium uppercase tracking-wider text-gray-600">ИИ-ассистент</h3>
-            <p className="relative mt-2 text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
-              Мониторинг миграции + web chat
-            </p>
-            <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
-              Встроенный агент · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
-            </p>
-            <p className="relative mt-2 text-xs text-sky-600">Перейти к чату и аналитике →</p>
-          </Link>
         </div>
-      </section>
 
-      <section>
-        <div className="glass-panel flex flex-col justify-center p-6">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-700">
-            О проекте
-          </h3>
-          <p className="mt-4 text-sm leading-relaxed text-gray-600">
-            Платформа объединяет географию потоков, анализ статистики и прогнозные модели по данным 2021–2024 гг.
+        <Link
+          to="/methodology"
+          className="glass-panel chart-glow group relative flex min-h-[140px] animate-fade-up flex-col justify-center overflow-hidden border-l-4 border-l-sky-500 p-5 opacity-0 transition-transform duration-300 [animation-fill-mode:forwards] hover:scale-[1.02] hover:border-sky-300"
+          style={{ animationDelay: '160ms' }}
+        >
+          <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-300/25 blur-2xl transition-opacity group-hover:opacity-100" />
+          <h3 className="relative text-xs font-medium uppercase tracking-wider text-gray-600">ИИ-ассистент</h3>
+          <p className="relative mt-2 text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
+            Мониторинг миграции + web chat
           </p>
-        </div>
+          <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
+            Встроенный агент · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
+          </p>
+          <p className="relative mt-2 text-xs text-sky-600">Перейти к чату и аналитике →</p>
+        </Link>
       </section>
 
       {showAvatarPrompt ? (

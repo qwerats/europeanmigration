@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
+import SiteFooter from './SiteFooter';
 
-const SECTION_IDS = ['intro', 'home', 'statistics', 'forecast', 'methodology'];
+const SECTION_IDS = ['intro', 'introduction', 'home', 'statistics', 'forecast', 'methodology'];
 
 const nav = [
   { id: 'home', label: 'Главная' },
@@ -140,9 +141,7 @@ export default function Layout({ children }) {
         AI-агент
       </button>
 
-      <footer className="mt-0 border-t border-sky-100 py-6 text-center text-xs text-gray-600">
-        © {new Date().getFullYear()} Миграционные потоки Европейского союза
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

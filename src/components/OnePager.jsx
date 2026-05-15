@@ -1,5 +1,6 @@
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import IntroPage from './IntroPage';
+import IntroductionSection from './IntroductionSection';
 import Dashboard from './Dashboard';
 import Statistics from './Statistics';
 import Forecast from './Forecast';
@@ -7,6 +8,7 @@ import AiAssistantPage from './AiAssistantPage';
 
 const SECTIONS = [
   { id: 'intro', Component: IntroPage },
+  { id: 'introduction', Component: IntroductionSection },
   { id: 'home', Component: Dashboard },
   { id: 'statistics', Component: Statistics },
   { id: 'forecast', Component: Forecast },
@@ -20,7 +22,7 @@ export default function OnePager() {
     <div className="w-full">
       {SECTIONS.map(({ id, Component }) => {
         const isIntro = id === 'intro';
-        const isFirstLight = id === 'home';
+        const isFirstLight = id === 'introduction';
         return (
           <section
             key={id}

@@ -6,15 +6,16 @@ import Statistics from './components/Statistics';
 import AiAssistantPage from './components/AiAssistantPage';
 import Forecast from './components/Forecast';
 import IntroNavPage from './components/IntroNavPage';
+import ResourcesPage from './components/ResourcesPage';
 
 export default function App() {
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<OnePager />} />
-        <Route path="/about" element={<IntroNavPage title="About" />} />
-        <Route path="/contact" element={<IntroNavPage title="Contact" />} />
-        <Route path="/resources" element={<IntroNavPage title="Resources" />} />
+        <Route path="/about" element={<IntroNavPage title="О сайте" />} />
+        <Route path="/contact" element={<IntroNavPage title="Контакты" />} />
+        <Route path="/resources" element={<ResourcesPage />} />
         <Route path="/home" element={<Dashboard />} />
         <Route path="/geography" element={<Navigate to="/statistics" replace />} />
         <Route path="/statistics" element={<Statistics />} />

@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "title": "Нерегулярные пересечения внешних границ ЕС по маршрутам",
+    "note": "Западный маршрут — Западное Средиземноморье и Западная Африка.",
+    "sourceLabel": "Источник: Frontex, Министерство внутренних дел Испании (ANNEX, 2024).",
+    "yAxisLabel": "Число пересечений"
+  },
+  "series": [
+    { "dataKey": "western", "name": "Западный маршрут", "color": "#f5e6a8", "labelFill": "#1e293b" },
+    { "dataKey": "eastern", "name": "Восточный маршрут", "color": "#a5b4fc", "labelFill": "#ffffff" },
+    { "dataKey": "central", "name": "Центральный маршрут", "color": "#5eead4", "labelFill": "#ffffff" }
+  ],
+  "data": [
+    { "year": "2015", "western": 7004, "eastern": 885386, "central": 153946 },
+    { "year": "2016", "western": 10000, "eastern": 182227, "central": 181459 },
+    { "year": "2017", "western": 23063, "eastern": 42319, "central": 119385 },
+    { "year": "2018", "western": 56245, "eastern": 56561, "central": 24800 },
+    { "year": "2019", "western": 23969, "eastern": 83333, "central": 14874 },
+    { "year": "2020", "western": 17228, "eastern": 20283, "central": 36435 },
+    { "year": "2021", "western": 18466, "eastern": 20567, "central": 67724 },
+    { "year": "2022", "western": 31219, "eastern": 42800, "central": 105561 },
+    { "year": "2023", "western": 56852, "eastern": 60000, "central": 158020 },
+    { "year": "2024", "western": 70664, "eastern": 69400, "central": 67000 },
+    { "year": "2025", "western": 36775, "eastern": 51399, "central": 66328 }
+  ]
+}

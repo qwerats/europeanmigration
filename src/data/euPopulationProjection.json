@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "title": "Прогноз численности населения ЕС",
+    "sourceLabel": "Источник: Eurostat, proj_23np / proj_25np (baseline). Сценарии: базовый, повышенная, пониженная миграция, отсутствие миграции.",
+    "yAxisLabel": "Население, млн",
+    "xAxisLabel": "Год"
+  },
+  "series": [
+    {
+      "dataKey": "higherMigration",
+      "name": "Повышенная миграция",
+      "color": "#1e3a5f",
+      "strokeWidth": 2.5
+    },
+    {
+      "dataKey": "baseline",
+      "name": "Базовый сценарий",
+      "color": "#ea580c",
+      "strokeWidth": 2.5
+    },
+    {
+      "dataKey": "lowerMigration",
+      "name": "Пониженная миграция",
+      "color": "#2563eb",
+      "strokeWidth": 2.5
+    },
+    {
+      "dataKey": "noMigration",
+      "name": "Отсутствие миграции",
+      "color": "#78716c",
+      "strokeWidth": 2.5
+    }
+  ],
+  "data": [
+    {
+      "year": 2022,
+      "higherMigration": 446.7,
+      "lowerMigration": 446.7,
+      "noMigration": 446.7
+    },
+    {
+      "year": 2023,
+      "higherMigration": 451.4,
+      "lowerMigration": 451.4,
+      "noMigration": 451.4
+    },
+    {
+      "year": 2025,
+      "baseline": 451.8,
+      "higherMigration": 455,
+      "lowerMigration": 451.4,
+      "noMigration": 449.4
+    },
+    {
+      "year": 2026,
+      "baseline": 452.5
+    },
+    {
+      "year": 2030,
+      "baseline": 453.3,
+      "higherMigration": 457.9,
+      "lowerMigration": 447.5,
+      "noMigration": 443.4
+    },
+    {
+      "year": 2035,
+      "baseline": 452.1,
+      "higherMigration": 460.6,
+      "lowerMigration": 443.4,
+      "noMigration": 436.2
+    },
+    {
+      "year": 2040,
+      "baseline": 450.7,
+      "higherMigration": 463.8,
+      "lowerMigration": 439.5,
+      "noMigration": 428.2
+    },
+    {
+      "year": 2045,
+      "baseline": 448.5,
+      "higherMigration": 466.1,
+      "lowerMigration": 434.7,
+      "noMigration": 419
+    },
+    {
+      "year": 2050,
+      "baseline": 445,
+      "higherMigration": 467.2,
+      "lowerMigration": 428.8,
+      "noMigration": 408.5
+    },
+    {
+      "year": 2055,
+      "baseline": 440.2,
+      "higherMigration": 467.1,
+      "lowerMigration": 421.8,
+      "noMigration": 396.6
+    },
+    {
+      "year": 2060,
+      "baseline": 434.3,
+      "higherMigration": 466.4,
+      "lowerMigration": 414.1,
+      "noMigration": 383.8
+    },
+    {
+      "year": 2065,
+      "baseline": 428.2,
+      "higherMigration": 465.7,
+      "lowerMigration": 406.4,
+      "noMigration": 370.9
+    },
+    {
+      "year": 2070,
+      "baseline": 422.9,
+      "higherMigration": 465.5,
+      "lowerMigration": 399.3,
+      "noMigration": 358.4
+    },
+    {
+      "year": 2075,
+      "baseline": 418.4,
+      "higherMigration": 466,
+      "lowerMigration": 393.1,
+      "noMigration": 346.5
+    },
+    {
+      "year": 2080,
+      "baseline": 414.3,
+      "higherMigration": 466.7,
+      "lowerMigration": 387.6,
+      "noMigration": 335.1
+    },
+    {
+      "year": 2085,
+      "baseline": 410.4,
+      "higherMigration": 467.5,
+      "lowerMigration": 382.6,
+      "noMigration": 324.2
+    },
+    {
+      "year": 2090,
+      "baseline": 406.5,
+      "higherMigration": 468.3,
+      "lowerMigration": 378,
+      "noMigration": 314
+    },
+    {
+      "year": 2095,
+      "baseline": 402.5,
+      "higherMigration": 469,
+      "lowerMigration": 373.7,
+      "noMigration": 304.3
+    },
+    {
+      "year": 2100,
+      "baseline": 398.8,
+      "higherMigration": 469.7,
+      "lowerMigration": 369.8,
+      "noMigration": 294.9
+    }
+  ]
+}
