@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -29,7 +29,7 @@ const chartTooltip = {
 };
 
 function formatMln(v) {
-  if (typeof v !== 'number' || Number.isNaN(v)) return '—';
+  if (typeof v !== 'number' || Number.isNaN(v)) return 'тАФ';
   return v.toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
 
@@ -101,8 +101,8 @@ export default function EuPopulationProjectionCard() {
               />
               <Tooltip
                 {...chartTooltip}
-                formatter={(val, name) => [`${formatMln(val)} млн`, name]}
-                labelFormatter={(l) => `Год ${l}`}
+                formatter={(val, name) => [`${formatMln(val)} ╨╝╨╗╨╜`, name]}
+                labelFormatter={(l) => `╨У╨╛╨┤ ${l}`}
               />
               <Legend
                 verticalAlign="bottom"

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAiAssistant } from '../context/AiAssistantContext';
 import { SITE_NAV_LINKS } from '../data/siteNavLinks';
 
 function scrollToSection(id) {
@@ -13,6 +14,8 @@ export default function SiteMapBar({ linkClass = '' }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { openAssistant } = useAiAssistant();
 
   useEffect(() => {
     if (!open) return undefined;
@@ -38,6 +41,12 @@ export default function SiteMapBar({ linkClass = '' }) {
       navigate({ pathname: '/', hash: id });
     }
     scrollToSection(id);
+  };
+
+  const openAi = () => {
+    setOpen(false);
+    if (pathname !== '/') navigate('/');
+    openAssistant();
   };
 
   return (
@@ -70,8 +79,16 @@ export default function SiteMapBar({ linkClass = '' }) {
           className="absolute left-1/2 top-full z-[70] mt-2 max-h-[min(70vh,22rem)] min-w-[13.5rem] -translate-x-1/2 overflow-y-auto rounded-lg border border-slate-300 bg-white py-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
         >
           {SITE_NAV_LINKS.map((link) => (
-            <li key={link.type === 'section' ? link.id : link.path}>
-              {link.type === 'section' ? (
+            <li key={link.type === 'section' ? link.id : link.type === 'ai' ? 'ai' : link.path}>
+              {link.type === 'ai' ? (
+                <button
+                  type="button"
+                  onClick={openAi}
+                  className="block w-full px-4 py-2 text-left text-sm font-normal normal-case tracking-normal text-gray-700 transition hover:bg-sky-50 hover:text-sky-900"
+                >
+                  {link.label}
+                </button>
+              ) : link.type === 'section' ? (
                 <button
                   type="button"
                   onClick={() => goToSection(link.id)}

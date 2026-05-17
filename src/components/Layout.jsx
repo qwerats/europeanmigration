@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
+import { AiAssistantProvider, useAiAssistant } from '../context/AiAssistantContext';
 import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
+import AiAssistantWindow from './AiAssistantWindow';
 import SiteFooter from './SiteFooter';
 
-const SECTION_IDS = ['intro', 'introduction', 'home', 'statistics', 'forecast', 'methodology'];
+const SECTION_IDS = ['intro', 'introduction', 'home', 'statistics'];
 
 const nav = [
   { id: 'home', label: 'Главная' },
-  { id: 'statistics', label: 'Статистика' },
-  { id: 'forecast', label: 'Прогноз' },
-  { id: 'methodology', label: 'ИИ-ассистент' },
+  { id: 'statistics', label: 'Соц.-экон. развитие' },
+  { id: 'methodology', label: 'ИИ-ассистент', action: 'ai' },
 ];
 
 function scrollSectionIntoView(id) {
@@ -19,9 +20,10 @@ function scrollSectionIntoView(id) {
   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-export default function Layout({ children }) {
+function LayoutShell({ children }) {
   const { pathname, hash } = useLocation();
   const navigate = useNavigate();
+  const { isOpen, openAssistant, toggleAssistant } = useAiAssistant();
   const [activeId, setActiveId] = useState('intro');
 
   const isOnePager = pathname === '/';
@@ -65,8 +67,14 @@ export default function Layout({ children }) {
     return () => observer.disconnect();
   }, [isOnePager, SHOW_SITE_HEADER]);
 
-  const handleNavClick = (e, id) => {
+  const handleNavClick = (e, item) => {
     e.preventDefault();
+    const { id, action } = item;
+    if (action === 'ai') {
+      if (pathname !== '/') navigate('/');
+      openAssistant();
+      return;
+    }
     if (isOnePager) {
       if (id === 'intro') {
         navigate({ pathname: '/', hash: '' }, { replace: true });
@@ -86,7 +94,7 @@ export default function Layout({ children }) {
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
             <a
               href={import.meta.env.BASE_URL}
-              onClick={(e) => handleNavClick(e, 'intro')}
+              onClick={(e) => handleNavClick(e, { id: 'intro' })}
               className="flex min-w-0 items-center gap-3 sm:gap-4 rounded-lg outline-none ring-offset-2 ring-offset-white focus-visible:ring-2 focus-visible:ring-sky-400"
             >
               <img
@@ -102,13 +110,14 @@ export default function Layout({ children }) {
             </a>
 
             <nav className="flex flex-wrap items-center gap-1 sm:gap-2" aria-label="Основная навигация">
-              {nav.map(({ id, label }) => {
+              {nav.map((item) => {
+                const { id, label } = item;
                 const isActive = isOnePager && activeId === id;
                 return (
                   <a
                     key={id}
-                    href={onePagerHashHref(id)}
-                    onClick={(e) => handleNavClick(e, id)}
+                    href={item.action === 'ai' ? '#ai-assistant' : onePagerHashHref(id)}
+                    onClick={(e) => handleNavClick(e, item)}
                     aria-current={isActive ? 'page' : undefined}
                     className={[
                       'group flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
@@ -129,19 +138,40 @@ export default function Layout({ children }) {
 
       <main className="w-full max-w-none px-0 py-0">{children}</main>
 
+      <AiAssistantWindow />
+
       <button
         type="button"
-        onClick={() => navigate('/methodology')}
-        className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-full border border-sky-300 bg-white/95 px-4 py-2 text-sm font-semibold text-sky-800 shadow-lg backdrop-blur transition hover:scale-[1.02] hover:bg-sky-50"
-        aria-label="Открыть ИИ-агента мониторинга"
+        onClick={toggleAssistant}
+        className={[
+          'fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold shadow-lg backdrop-blur transition hover:scale-[1.02]',
+          isOpen
+            ? 'border-sky-500 bg-sky-600 text-white hover:bg-sky-700'
+            : 'border-sky-300 bg-white/95 text-sky-800 hover:bg-sky-50',
+        ].join(' ')}
+        aria-label={isOpen ? 'Закрыть ИИ-ассистента' : 'Открыть ИИ-ассистента'}
+        aria-expanded={isOpen}
       >
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 text-[10px] font-bold text-white">
+        <span
+          className={[
+            'inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold',
+            isOpen ? 'bg-white text-sky-700' : 'bg-sky-600 text-white',
+          ].join(' ')}
+        >
           AI
         </span>
-        AI-агент
+        {isOpen ? 'Закрыть' : 'ИИ-ассистент'}
       </button>
 
       <SiteFooter />
     </div>
+  );
+}
+
+export default function Layout({ children }) {
+  return (
+    <AiAssistantProvider>
+      <LayoutShell>{children}</LayoutShell>
+    </AiAssistantProvider>
   );
 }

@@ -3,8 +3,7 @@ import Layout from './components/Layout';
 import OnePager from './components/OnePager';
 import Dashboard from './components/Dashboard';
 import Statistics from './components/Statistics';
-import AiAssistantPage from './components/AiAssistantPage';
-import Forecast from './components/Forecast';
+import MethodologyOpener from './components/MethodologyOpener';
 import IntroNavPage from './components/IntroNavPage';
 import ResourcesPage from './components/ResourcesPage';
 
@@ -19,8 +18,8 @@ export default function App() {
         <Route path="/home" element={<Dashboard />} />
         <Route path="/geography" element={<Navigate to="/statistics" replace />} />
         <Route path="/statistics" element={<Statistics />} />
-        <Route path="/forecast" element={<Forecast />} />
-        <Route path="/methodology" element={<AiAssistantPage />} />
+        <Route path="/forecast" element={<Navigate to="/" replace />} />
+        <Route path="/methodology" element={<MethodologyOpener />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>

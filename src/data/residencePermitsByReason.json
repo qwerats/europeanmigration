@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Причины подачи на ВНЖ (2015-2024)",
+    "yAxisLabel": "Тысяч выданных разрешений",
+    "sourceLabel": "Источник: Eurostat, migr_resfirst (First permits by reason)."
+  },
+  "series": [
+    {
+      "dataKey": "family",
+      "name": "Семейные",
+      "color": "#2563eb"
+    },
+    {
+      "dataKey": "education",
+      "name": "Образование",
+      "color": "#ca8a04"
+    },
+    {
+      "dataKey": "employment",
+      "name": "Трудовые",
+      "color": "#ef4444"
+    },
+    {
+      "dataKey": "other",
+      "name": "Прочие",
+      "color": "#14b8a6"
+    }
+  ],
+  "data": [
+    {
+      "year": "2015",
+      "family": 671,
+      "education": 297,
+      "other": 435,
+      "employment": 590
+    },
+    {
+      "year": "2016",
+      "family": 690,
+      "education": 329,
+      "other": 739,
+      "employment": 736
+    },
+    {
+      "year": "2017",
+      "family": 736,
+      "education": 355,
+      "other": 705,
+      "employment": 903
+    },
+    {
+      "year": "2018",
+      "family": 814,
+      "education": 398,
+      "other": 596,
+      "employment": 984
+    },
+    {
+      "year": "2019",
+      "family": 805,
+      "education": 408,
+      "other": 569,
+      "employment": 1203
+    },
+    {
+      "year": "2020",
+      "family": 620,
+      "education": 280,
+      "other": 490,
+      "employment": 940
+    },
+    {
+      "year": "2021",
+      "family": 720,
+      "education": 360,
+      "other": 520,
+      "employment": 1360
+    },
+    {
+      "year": "2022",
+      "family": 870,
+      "education": 470,
+      "other": 750,
+      "employment": 1250
+    },
+    {
+      "year": "2023",
+      "family": 1020,
+      "education": 550,
+      "other": 990,
+      "employment": 1180
+    },
+    {
+      "year": "2024",
+      "family": 950,
+      "education": 550,
+      "other": 890,
+      "employment": 1120
+    }
+  ]
+}

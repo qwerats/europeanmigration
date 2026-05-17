@@ -114,6 +114,17 @@ export default function EUMigrationTrendCard() {
       </div>
 
       <div className="relative px-2 pb-3 pt-3 sm:px-4 sm:pb-4 sm:pt-4">
+        <p className="mx-auto mb-4 max-w-4xl px-1 text-left text-sm leading-relaxed text-gray-700 sm:px-2 sm:text-base">
+          Миграционный кризис 2015 г., а затем резкое увеличение числа мигрантов в 2022 г. стала причиной
+          «кризиса солидарности». Фактически это означает, разногласия и неспособность выработки общей
+          миграционной политики среди государств Европы; а также невозможность донесения содержания мер до
+          общественности.
+        </p>
+        <p className="mx-auto mb-4 max-w-4xl px-1 text-left text-sm leading-relaxed text-gray-700 sm:px-2 sm:text-base">
+          Основными тенденциями миграции в ЕС являются: приоритет рестриктивной политики над превентивным
+          подходом; зависимость миграции от появления «чёрных лебедей» (гражданская война в Сирии с 2011 г.,
+          арабская война, Украинский кризис и COVID-19).
+        </p>
         <p className="mx-auto mb-2 max-w-4xl px-1 text-left text-base font-semibold text-black sm:mb-3 sm:px-2 sm:text-lg">
           Общее количество мигрантов в ЕС
         </p>
@@ -236,6 +247,11 @@ export default function EUMigrationTrendCard() {
         </div>
         <p className="mt-2 text-center text-[10px] text-slate-400 sm:text-[11px]">
           Нажмите на график — увеличить или свернуть
+        </p>
+        <p className="mx-auto mt-4 max-w-4xl px-1 text-left text-xs leading-relaxed text-slate-600 sm:px-2 sm:text-sm">
+          <span className="font-semibold text-slate-700">Примечание.</span> Если на графике общего количества
+          мигрантов влияние Сирийского миграционного кризиса не так очевидно, то впоследствии графики
+          пересечения внешних границ и аналитика роста по странам докажут обратное.
         </p>
       </div>
 

@@ -3,16 +3,11 @@ import IntroPage from './IntroPage';
 import IntroductionSection from './IntroductionSection';
 import Dashboard from './Dashboard';
 import Statistics from './Statistics';
-import Forecast from './Forecast';
-import AiAssistantPage from './AiAssistantPage';
-
 const SECTIONS = [
   { id: 'intro', Component: IntroPage },
   { id: 'introduction', Component: IntroductionSection },
   { id: 'home', Component: Dashboard },
   { id: 'statistics', Component: Statistics },
-  { id: 'forecast', Component: Forecast },
-  { id: 'methodology', Component: AiAssistantPage },
 ];
 
 export default function OnePager() {

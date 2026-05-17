@@ -54,12 +54,14 @@ export default function MediterraneanRoutesStackedBar() {
       className="relative overflow-visible rounded-2xl border border-sky-200/90 bg-white shadow-[0_8px_30px_rgba(14,165,233,0.12)]"
     >
       <div className="relative px-2 pb-3 pt-5 sm:px-4 sm:pb-4 sm:pt-6">
-        <p className="mx-auto mb-1 max-w-4xl px-1 text-left text-base font-semibold text-black sm:px-2 sm:text-lg">
+        <p className="mx-auto mb-3 max-w-4xl px-1 text-left text-base font-semibold text-black sm:px-2 sm:text-lg">
           {meta.title}
         </p>
-        <p className="mx-auto mb-3 max-w-4xl px-1 text-left text-xs text-slate-600 sm:px-2 sm:text-sm">
-          {meta.note}
-        </p>
+        {meta.note ? (
+          <p className="mx-auto mb-3 max-w-4xl px-1 text-left text-xs text-slate-600 sm:px-2 sm:text-sm">
+            {meta.note}
+          </p>
+        ) : null}
         <div className="mx-auto h-[400px] w-full max-w-4xl sm:h-[440px]">
           <ResponsiveContainer width="100%" height="100%" minHeight={360}>
             <BarChart data={chartData} margin={{ top: 8, right: 12, left: 32, bottom: 52 }}>

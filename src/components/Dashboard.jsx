@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { publicUrl } from '../utils/publicUrl';
 import EUMigrationTrendCard from './EUMigrationTrendCard';
-import EuPopulationProjectionCard from './EuPopulationProjectionCard';
+import MigrationRoutesMapFigure from './MigrationRoutesMapFigure';
 import MediterraneanRoutesStackedBar from './MediterraneanRoutesStackedBar';
 import EuBigFiveMigrantsLineCompact from './EuBigFiveMigrantsLineCompact';
 import TopMigrantsByCountryBar from './TopMigrantsByCountryBar';
+import ResidencePermitsByReasonCard from './ResidencePermitsByReasonCard';
 
 export default function Dashboard() {
   const [showAvatarPrompt, setShowAvatarPrompt] = useState(false);
@@ -36,7 +36,7 @@ export default function Dashboard() {
 
       <section className="space-y-6">
         <EUMigrationTrendCard />
-        <EuPopulationProjectionCard />
+        <MigrationRoutesMapFigure />
         <MediterraneanRoutesStackedBar />
         <p className="mx-auto max-w-4xl px-4 py-6 text-left text-xl font-bold leading-relaxed text-gray-900 sm:px-6 sm:py-8 sm:text-2xl sm:leading-snug">
           Германия остаётся лидером по привлечению мигрантов на протяжении 10 лет (с 2010 по 2025).
@@ -50,21 +50,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <Link
-          to="/methodology"
-          className="glass-panel chart-glow group relative flex min-h-[140px] animate-fade-up flex-col justify-center overflow-hidden border-l-4 border-l-sky-500 p-5 opacity-0 transition-transform duration-300 [animation-fill-mode:forwards] hover:scale-[1.02] hover:border-sky-300"
-          style={{ animationDelay: '160ms' }}
-        >
-          <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-sky-300/25 blur-2xl transition-opacity group-hover:opacity-100" />
-          <h3 className="relative text-xs font-medium uppercase tracking-wider text-gray-600">ИИ-ассистент</h3>
-          <p className="relative mt-2 text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
-            Мониторинг миграции + web chat
-          </p>
-          <p className="relative mt-2 text-sm leading-relaxed text-gray-600">
-            Встроенный агент · <span className="font-medium text-sky-700">MigrationMonitor EU</span>
-          </p>
-          <p className="relative mt-2 text-xs text-sky-600">Перейти к чату и аналитике →</p>
-        </Link>
+        <ResidencePermitsByReasonCard />
       </section>
 
       {showAvatarPrompt ? (
