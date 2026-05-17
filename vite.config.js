@@ -3,7 +3,11 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
-import { runMigrationAgent, streamOllamaMigrationAgent } from './api/migration-agent.js';
+import {
+  runMigrationAgent,
+  streamOllamaMigrationAgent,
+  warmOllamaMigrationAgent,
+} from './api/migration-agent.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -34,6 +38,14 @@ export default defineConfig(({ mode }) => {
       {
         name: 'local-migration-agent-api',
         configureServer(server) {
+          const provider = (process.env.AI_PROVIDER || env.AI_PROVIDER || 'ollama').toLowerCase();
+          if (provider === 'ollama') {
+            warmOllamaMigrationAgent({
+              ollamaBaseUrl: process.env.OLLAMA_BASE_URL || env.OLLAMA_BASE_URL,
+              ollamaModel: process.env.OLLAMA_MODEL || env.OLLAMA_MODEL,
+            }).catch(() => {});
+          }
+
           server.middlewares.use(async (req, res, next) => {
             if (req.url !== '/api/migration-agent') return next();
 

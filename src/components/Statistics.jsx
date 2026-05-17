@@ -1,12 +1,13 @@
 import EuPopulationProjectionCard from './EuPopulationProjectionCard';
 import EuFertilityRateCard from './EuFertilityRateCard';
+import EuAgeingCostsBaselineChart from './EuAgeingCostsBaselineChart';
 
 export default function Statistics() {
   return (
     <div className="animate-fade-up w-full space-y-8 opacity-0 [animation-fill-mode:forwards]">
       <header className="w-full">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Проблемы социально-экономического развития
+          Влияние миграции на макроэкономическое развитие
         </h2>
       </header>
 
@@ -14,11 +15,15 @@ export default function Statistics() {
         <p className="w-full text-base font-medium leading-relaxed text-gray-800 sm:text-lg sm:leading-loose lg:text-xl lg:leading-relaxed">
           Несмотря на постоянный рост миграционных потоков, Европейский Союз сталкивается с
           демографическим кризисом, который характеризуется отрицательной рождаемостью и старением населения.
+          Нынешний прогноз относительно уровня рождаемости в Европе является негативным, а также будет
+          заметно негативное влияние старения населения на потенциальные темпы экономического роста в
+          отдельных странах ЕС.
         </p>
       </div>
 
       <EuPopulationProjectionCard />
       <EuFertilityRateCard />
+      <EuAgeingCostsBaselineChart />
     </div>
   );
 }

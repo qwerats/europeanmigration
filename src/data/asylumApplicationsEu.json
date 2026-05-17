@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "title": "Количество подач на получение убежища",
+    "legendLabel": "Подачи на убежище",
+    "sourceLabel": "Источник: Eurostat, migr_asyappctza (ЕС-27, граждане Extra-EU, первичная подача)."
+  },
+  "data": [
+    { "year": 2014, "applications": 530560 },
+    { "year": 2015, "applications": 1216860 },
+    { "year": 2016, "applications": 1166815 },
+    { "year": 2017, "applications": 620265 },
+    { "year": 2018, "applications": 564680 },
+    { "year": 2019, "applications": 628930 },
+    { "year": 2020, "applications": 415235 },
+    { "year": 2021, "applications": 535985 },
+    { "year": 2022, "applications": 873680 },
+    { "year": 2023, "applications": 1049510 },
+    { "year": 2024, "applications": 912425 },
+    { "year": 2025, "applications": 669365 }
+  ]
+}

@@ -110,7 +110,7 @@ const data = years.map((year) => {
 
 const payload = {
   meta: {
-    title: 'Рождаемость (рождений на женщину)',
+    title: 'Количество детей на женщину',
     yAxisLabel: 'Количество детей на женщину',
     xAxisLabel: 'Год',
     sourceLabel:

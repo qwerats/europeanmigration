@@ -61,6 +61,25 @@ export const AGENT_SYSTEM_PROMPT = `
 - Язык ответа: русский (и английский только если пользователь попросил).
 `;
 
+/** Короткий системный промпт для Ollama — меньше токенов, быстрее inference. */
+export const OLLAMA_AGENT_SYSTEM_PROMPT = `Ты Migration Monitor EU: мониторинг миграционной статистики ЕС.
+Источники: Eurostat migration-asylum, IOM, Destatis, INSEE, ISTAT, INE.
+Фиксируй дату публикации, период, страну. Не выдумывай цифры.
+Статусы: ТРЕБУЕТ ОБНОВЛЕНИЯ (>5%), НОВЫЙ ПЕРИОД, РЕВИЗИЯ МЕТОДОЛОГИИ.
+Ответ кратко, по-русски, со ссылками URL.`;
+
+const FAST_PRIORITY_SOURCES = [
+  'https://ec.europa.eu/eurostat/web/migration-asylum/overview',
+  'https://www.iom.int/data-and-research',
+];
+
+const LIVE_SOURCES_RE =
+  /eurostat|iom|destatis|insee|istat|ine\.es|обнов|монитор|провер|asylum|убежищ|мигран|residence|публикац|источник|новые данн|сканир/i;
+
+const OLLAMA_SOURCES_DIGEST_MAX = 2200;
+const OLLAMA_FETCH_TIMEOUT_MS = 3500;
+const OLLAMA_SNAPSHOT_TEXT_MAX = 380;
+
 export function sanitizeMessages(messages) {
   if (!Array.isArray(messages)) return [];
   return messages
@@ -74,8 +93,35 @@ export function sanitizeMessagesForOllama(messages) {
   if (!Array.isArray(messages)) return [];
   return messages
     .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-    .slice(-6)
-    .map((m) => ({ role: m.role, content: m.content.slice(0, 3500) }));
+    .slice(-4)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 1200) }));
+}
+
+export function needsLiveSources(userPrompt) {
+  return LIVE_SOURCES_RE.test(String(userPrompt || ''));
+}
+
+function getOllamaModel(options) {
+  return options.ollamaModel || process.env.OLLAMA_MODEL || 'llama3.2:3b';
+}
+
+function getOllamaBaseUrl(options) {
+  return (options.ollamaBaseUrl || process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434').replace(
+    /\/$/,
+    ''
+  );
+}
+
+function getOllamaRuntimeOptions() {
+  const numPredict = Number(process.env.OLLAMA_NUM_PREDICT);
+  const numCtx = Number(process.env.OLLAMA_NUM_CTX);
+  return {
+    temperature: 0.2,
+    num_predict: Number.isFinite(numPredict) && numPredict > 64 ? numPredict : 900,
+    num_ctx: Number.isFinite(numCtx) && numCtx >= 2048 ? numCtx : 3072,
+    top_k: 20,
+    top_p: 0.9,
+  };
 }
 
 export function extractOutputText(responseJson) {
@@ -107,76 +153,139 @@ function stripHtml(rawHtml, maxLen = 3200) {
     .slice(0, maxLen);
 }
 
-async function fetchSourceSnapshot(url, fetchImpl, textMaxLen = 1200) {
+async function fetchSourceSnapshot(url, fetchImpl, textMaxLen = OLLAMA_SNAPSHOT_TEXT_MAX) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), OLLAMA_FETCH_TIMEOUT_MS);
   try {
     const response = await fetchImpl(url, {
-      headers: {
-        'User-Agent': 'MigrationMonitor-EU-Agent/1.0',
-      },
+      headers: { 'User-Agent': 'MigrationMonitor-EU-Agent/1.0' },
+      signal: controller.signal,
     });
     if (!response.ok) {
       return `Источник: ${url}\nСтатус: недоступен (${response.status})`;
     }
     const html = await response.text();
     const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-    const title = titleMatch ? stripHtml(titleMatch[1], 180) : 'Без заголовка';
+    const title = titleMatch ? stripHtml(titleMatch[1], 120) : 'Без заголовка';
     const text = stripHtml(html, textMaxLen);
     return `Источник: ${url}\nЗаголовок: ${title}\nФрагмент: ${text}`;
   } catch (err) {
-    return `Источник: ${url}\nОшибка: ${err?.message || 'не удалось получить данные'}`;
+    const msg =
+      err?.name === 'AbortError' ? 'таймаут загрузки' : err?.message || 'не удалось получить данные';
+    return `Источник: ${url}\nОшибка: ${msg}`;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
-async function collectPrioritySources(fetchImpl) {
-  const sources = [
-    'https://ec.europa.eu/eurostat/web/migration-asylum/overview',
-    'https://www.iom.int/data-and-research',
-    'https://www.destatis.de/EN/Themes/Society-Environment/Population/Migration/_node.html',
-    'https://www.insee.fr/en/statistiques',
-    'https://www.istat.it/en/population-and-households',
-    'https://www.ine.es/en/index.htm',
-  ];
-  const snapshots = await Promise.all(sources.map((url) => fetchSourceSnapshot(url, fetchImpl)));
+async function collectFastPrioritySources(fetchImpl) {
+  const snapshots = await Promise.all(
+    FAST_PRIORITY_SOURCES.map((url) => fetchSourceSnapshot(url, fetchImpl))
+  );
   return snapshots.join('\n\n');
 }
 
-/** Кэш HTML-снапшотов между запросами (не дергать 6 сайтов на каждый вопрос). */
-let sourcesCache = { digest: '', expiresAt: 0 };
+const STATIC_SOURCES_HINT =
+  'Приоритетные URL (без загрузки страниц): Eurostat migration-asylum overview; IOM data-and-research. Для полного скана напишите «проверь Eurostat» или «мониторинг IOM».';
+
+/** Кэш HTML-снапшотов; stale-while-revalidate — не ждать сеть, если есть старый кэш. */
+let sourcesCache = { digest: '', expiresAt: 0, refreshing: null };
 
 function getSourcesCacheTtlMs() {
   const raw = process.env.MIGRATION_SOURCES_CACHE_MS;
   const n = raw ? Number(raw) : NaN;
   if (Number.isFinite(n) && n >= 30_000) return n;
-  return 15 * 60 * 1000;
+  return 30 * 60 * 1000;
 }
 
-async function getCachedPrioritySources(fetchImpl) {
+function refreshSourcesInBackground(fetchImpl) {
+  if (sourcesCache.refreshing) return;
+  sourcesCache.refreshing = collectFastPrioritySources(fetchImpl)
+    .then((digest) => {
+      sourcesCache = {
+        digest,
+        expiresAt: Date.now() + getSourcesCacheTtlMs(),
+        refreshing: null,
+      };
+    })
+    .catch(() => {
+      sourcesCache.refreshing = null;
+    });
+}
+
+async function getSourcesForOllama(fetchImpl, userPrompt) {
+  if (!needsLiveSources(userPrompt)) {
+    return STATIC_SOURCES_HINT;
+  }
+
   const now = Date.now();
+  const ttl = getSourcesCacheTtlMs();
+
   if (sourcesCache.digest && now < sourcesCache.expiresAt) {
     return sourcesCache.digest;
   }
-  const digest = await collectPrioritySources(fetchImpl);
-  sourcesCache = { digest, expiresAt: now + getSourcesCacheTtlMs() };
+
+  if (sourcesCache.digest) {
+    refreshSourcesInBackground(fetchImpl);
+    return sourcesCache.digest;
+  }
+
+  const digest = await collectFastPrioritySources(fetchImpl);
+  sourcesCache = { digest, expiresAt: now + ttl, refreshing: null };
   return digest;
 }
 
-const OLLAMA_SOURCES_DIGEST_MAX = 7000;
-
-function buildOllamaUserPrompt(cleanMessages, sourcesDigest, today) {
-  const latestUserPrompt = cleanMessages.filter((m) => m.role === 'user').at(-1)?.content || '';
+function buildOllamaChatMessages(cleanMessages, sourcesDigest, today) {
   let digest = sourcesDigest;
   if (digest.length > OLLAMA_SOURCES_DIGEST_MAX) {
-    digest = `${digest.slice(0, OLLAMA_SOURCES_DIGEST_MAX)}\n\n[…снапшоты источников сокращены для скорости]`;
+    digest = `${digest.slice(0, OLLAMA_SOURCES_DIGEST_MAX)}\n[…сокращено]`;
   }
+
   return [
-    `Текущая дата: ${today}.`,
-    AGENT_SYSTEM_PROMPT,
-    'Ниже снапшоты приоритетных источников (могут быть кэшированы несколько минут; если недоступны — отмечено в тексте):',
-    digest,
-    'История диалога:',
-    ...cleanMessages.map((m) => `${m.role === 'assistant' ? 'assistant' : 'user'}: ${m.content}`),
-    `Текущий запрос пользователя: ${latestUserPrompt}`,
-  ].join('\n\n');
+    {
+      role: 'system',
+      content: `${OLLAMA_AGENT_SYSTEM_PROMPT}\nДата: ${today}.\n\nСнапшоты:\n${digest}`,
+    },
+    ...cleanMessages,
+  ];
+}
+
+function buildOllamaRequestBody(model, messages, stream) {
+  return {
+    model,
+    messages,
+    stream,
+    keep_alive: process.env.OLLAMA_KEEP_ALIVE || '30m',
+    options: getOllamaRuntimeOptions(),
+  };
+}
+
+/** Прогрев: держит модель в RAM и заполняет кэш источников при старте dev-сервера. */
+export async function warmOllamaMigrationAgent(options = {}) {
+  const fetchImpl = options.fetchImpl || fetch;
+  const base = getOllamaBaseUrl(options);
+  const model = getOllamaModel(options);
+
+  await Promise.allSettled([
+    fetchImpl(`${base}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: 'ok' }],
+        stream: false,
+        keep_alive: process.env.OLLAMA_KEEP_ALIVE || '30m',
+        options: { num_predict: 8, num_ctx: 512 },
+      }),
+    }),
+    collectFastPrioritySources(fetchImpl).then((digest) => {
+      sourcesCache = {
+        digest,
+        expiresAt: Date.now() + getSourcesCacheTtlMs(),
+        refreshing: null,
+      };
+    }),
+  ]);
 }
 
 async function* parseOllamaChatStream(response) {
@@ -235,33 +344,21 @@ async function runWithOllama(messages, options = {}) {
   }
 
   const fetchImpl = options.fetchImpl || fetch;
-  const ollamaBaseUrl = options.ollamaBaseUrl || process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
-  const ollamaModel = options.ollamaModel || process.env.OLLAMA_MODEL || 'llama3.1:8b';
-  const sourcesDigest = await getCachedPrioritySources(fetchImpl);
+  const ollamaBaseUrl = getOllamaBaseUrl(options);
+  const ollamaModel = getOllamaModel(options);
+  const latestUserPrompt = cleanMessages.filter((m) => m.role === 'user').at(-1)?.content || '';
+  const sourcesDigest = await getSourcesForOllama(fetchImpl, latestUserPrompt);
   const today = new Date().toISOString().slice(0, 10);
-  const finalPrompt = buildOllamaUserPrompt(cleanMessages, sourcesDigest, today);
+  const chatMessages = buildOllamaChatMessages(cleanMessages, sourcesDigest, today);
 
   let response;
   try {
-    response = await fetchImpl(`${ollamaBaseUrl.replace(/\/$/, '')}/api/chat`, {
+    response = await fetchImpl(`${ollamaBaseUrl}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: ollamaModel,
-        messages: [
-          {
-            role: 'user',
-            content: finalPrompt,
-          },
-        ],
-        stream: false,
-        options: {
-          temperature: 0.2,
-          num_predict: 4096,
-        },
-      }),
+      body: JSON.stringify(buildOllamaRequestBody(ollamaModel, chatMessages, false)),
     });
   } catch {
     const err = new Error(
@@ -275,7 +372,7 @@ async function runWithOllama(messages, options = {}) {
   if (!response.ok) {
     const err = new Error(
       json?.error ||
-        'Ollama недоступен. Запустите `ollama serve` и загрузите модель `ollama pull llama3.1:8b`.'
+        `Ollama недоступен. Запустите \`ollama serve\` и загрузите модель \`ollama pull ${ollamaModel}\`.`
     );
     err.status = response.status;
     throw err;
@@ -301,33 +398,21 @@ export async function* streamOllamaMigrationAgent(messages, options = {}) {
   }
 
   const fetchImpl = options.fetchImpl || fetch;
-  const ollamaBaseUrl = options.ollamaBaseUrl || process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
-  const ollamaModel = options.ollamaModel || process.env.OLLAMA_MODEL || 'llama3.1:8b';
-  const sourcesDigest = await getCachedPrioritySources(fetchImpl);
+  const ollamaBaseUrl = getOllamaBaseUrl(options);
+  const ollamaModel = getOllamaModel(options);
+  const latestUserPrompt = cleanMessages.filter((m) => m.role === 'user').at(-1)?.content || '';
+  const sourcesDigest = await getSourcesForOllama(fetchImpl, latestUserPrompt);
   const today = new Date().toISOString().slice(0, 10);
-  const finalPrompt = buildOllamaUserPrompt(cleanMessages, sourcesDigest, today);
+  const chatMessages = buildOllamaChatMessages(cleanMessages, sourcesDigest, today);
 
   let response;
   try {
-    response = await fetchImpl(`${ollamaBaseUrl.replace(/\/$/, '')}/api/chat`, {
+    response = await fetchImpl(`${ollamaBaseUrl}/api/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: ollamaModel,
-        messages: [
-          {
-            role: 'user',
-            content: finalPrompt,
-          },
-        ],
-        stream: true,
-        options: {
-          temperature: 0.2,
-          num_predict: 4096,
-        },
-      }),
+      body: JSON.stringify(buildOllamaRequestBody(ollamaModel, chatMessages, true)),
     });
   } catch {
     const err = new Error(

@@ -208,7 +208,8 @@ export default function MigrationAgentChat({ compact = false }) {
           <p>{error}</p>
           {needsOllamaSetup ? (
             <p className="mt-1 text-xs text-red-800/90">
-              Установите Ollama и запустите: <code>ollama pull llama3.1:8b</code>, <code>ollama serve</code>.
+              Установите Ollama: <code>ollama pull llama3.2:3b</code>, <code>ollama serve</code> (быстрее, чем
+              8b). Для полного скана источников укажите в вопросе «Eurostat» или «мониторинг».
             </p>
           ) : null}
           {needsApiKeySetup ? (

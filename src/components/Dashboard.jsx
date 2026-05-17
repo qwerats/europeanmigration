@@ -6,6 +6,7 @@ import MediterraneanRoutesStackedBar from './MediterraneanRoutesStackedBar';
 import EuBigFiveMigrantsLineCompact from './EuBigFiveMigrantsLineCompact';
 import TopMigrantsByCountryBar from './TopMigrantsByCountryBar';
 import ResidencePermitsByReasonCard from './ResidencePermitsByReasonCard';
+import AsylumApplicationsChart from './AsylumApplicationsChart';
 
 export default function Dashboard() {
   const [showAvatarPrompt, setShowAvatarPrompt] = useState(false);
@@ -51,6 +52,7 @@ export default function Dashboard() {
         </div>
 
         <ResidencePermitsByReasonCard />
+        <AsylumApplicationsChart />
       </section>
 
       {showAvatarPrompt ? (
