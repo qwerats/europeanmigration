@@ -170,7 +170,7 @@ export default function EuFertilityRateCard() {
                   stroke="#94a3b8"
                   strokeDasharray="6 4"
                   label={{
-                    value: 'Уровень замещения (2,1)',
+                    value: 'Необходимый уровень рождаемости (2,1)',
                     position: 'insideTopRight',
                     fill: '#64748b',
                     fontSize: 10,
