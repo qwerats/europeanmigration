@@ -144,7 +144,7 @@ function LayoutShell({ children }) {
         type="button"
         onClick={toggleAssistant}
         className={[
-          'fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold shadow-lg backdrop-blur transition hover:scale-[1.02]',
+          'fixed bottom-5 right-5 z-[90] inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold shadow-lg backdrop-blur transition hover:scale-[1.02]',
           isOpen
             ? 'border-sky-500 bg-sky-600 text-white hover:bg-sky-700'
             : 'border-sky-300 bg-white/95 text-sky-800 hover:bg-sky-50',

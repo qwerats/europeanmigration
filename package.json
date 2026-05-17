@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "monitor": "node scripts/migration-monitor-run.mjs",
+    "email:cmd": "node scripts/migration-email-imap.mjs",
+    "email:imap": "node scripts/migration-email-imap.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

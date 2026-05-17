@@ -4,6 +4,7 @@ import OnePager from './components/OnePager';
 import Dashboard from './components/Dashboard';
 import Statistics from './components/Statistics';
 import MethodologyOpener from './components/MethodologyOpener';
+import AboutPage from './components/AboutPage';
 import IntroNavPage from './components/IntroNavPage';
 import ResourcesPage from './components/ResourcesPage';
 
@@ -12,7 +13,7 @@ export default function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<OnePager />} />
-        <Route path="/about" element={<IntroNavPage title="О сайте" />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<IntroNavPage title="Контакты" />} />
         <Route path="/resources" element={<ResourcesPage />} />
         <Route path="/home" element={<Dashboard />} />

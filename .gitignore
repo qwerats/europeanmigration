@@ -1,21 +1,11 @@
-# Dependencies
-node_modules/
-
-# Build
-dist/
-
-# Local env
+node_modules
+dist
 .env
 .env.local
-.env.*.local
-
-# Logs / debug
-npm-debug.log*
-*.log
-
-# Editor / OS
 .DS_Store
-Thumbs.db
-*.swp
-.idea/
-.vscode/
+
+# Migration monitor runtime state
+/data/metrics-history.json
+/data/email-subscribers.json
+/data/agent-chat-history.json
+/reports/

@@ -1,4 +1,14 @@
-import { useId, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useAiAssistant } from '../context/AiAssistantContext';
+import { clearChatHistory, loadChatHistory, saveChatHistory } from '../lib/agentChatHistory';
+import {
+  buildMonitorMessages,
+  fetchMigrationMonitor,
+  formatUpdatedLabel,
+  markAutoRunToday,
+  msUntilNextLocalMidnight,
+  shouldRunDailyAuto,
+} from '../lib/migrationMonitorClient';
 
 const STARTER_PROMPTS = [
   'Сделай еженедельный мониторинг новых публикаций Eurostat и IOM.',
@@ -10,22 +20,114 @@ const INITIAL_MESSAGES = [
   {
     role: 'assistant',
     content:
-      'Я Migration Monitor EU. Могу искать свежие данные в интернете, сверять метрики и выдавать рекомендации по обновлению дашборда.',
+      'Я Migration Monitor EU. Сверяю JSON дашборда с baseline. Команды: PAUSE, RESUME, UNSUBSCRIBE, FILTER:DE,FR:Asylum,ResidencePermits.\n\nНажмите «Обновить» в шапке или дождитесь автообновления в 00:00.',
   },
 ];
 
-export default function MigrationAgentChat({ compact = false }) {
+function readInitialMessages() {
+  const saved = loadChatHistory();
+  if (saved.messages?.length) return saved.messages;
+  return INITIAL_MESSAGES;
+}
+
+export default function MigrationAgentChat({ fullscreen = false }) {
   const inputId = useId();
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const { registerMonitorRefresh, setLastUpdatedAt, lastUpdatedAt, isRefreshing } = useAiAssistant();
+  const [messages, setMessages] = useState(readInitialMessages);
+  const messagesRef = useRef(messages);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const needsApiKeySetup = error.includes('OPENAI_API_KEY');
-  const needsOllamaSetup = error.toLowerCase().includes('ollama');
+  const needsMonitorHint = error.toLowerCase().includes('metrics-history') || error.includes('HTTP');
+
+  messagesRef.current = messages;
+
+  useEffect(() => {
+    const saved = loadChatHistory();
+    if (saved.lastUpdatedAt) setLastUpdatedAt(saved.lastUpdatedAt);
+  }, [setLastUpdatedAt]);
+
+  useEffect(() => {
+    saveChatHistory(messages, lastUpdatedAt);
+  }, [messages, lastUpdatedAt]);
+
+  const handleClearHistory = () => {
+    if (!window.confirm('Удалить всю историю переписки с агентом?')) return;
+    clearChatHistory();
+    setMessages(INITIAL_MESSAGES);
+    setError('');
+  };
+
+  const runMonitorRefresh = useCallback(
+    async (source = 'manual') => {
+      setError('');
+      setIsLoading(true);
+
+      try {
+        const requestMessages = buildMonitorMessages(messagesRef.current, source);
+        const { reply } = await fetchMigrationMonitor(requestMessages);
+
+        const stamp =
+          source === 'midnight' ? '00:00 · авто' : source === 'auto' ? 'авто за сегодня' : 'по запросу';
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: `Обновление (${stamp}) · ${formatUpdatedLabel(new Date().toISOString())}\n\n${reply}`,
+          },
+        ]);
+        setLastUpdatedAt(new Date().toISOString());
+        return true;
+      } catch (err) {
+        setError(err?.message || 'Ошибка запроса к агенту мониторинга.');
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [setLastUpdatedAt]
+  );
+
+  useEffect(() => {
+    registerMonitorRefresh(runMonitorRefresh);
+    return () => registerMonitorRefresh(null);
+  }, [registerMonitorRefresh, runMonitorRefresh]);
+
+  useEffect(() => {
+    if (!fullscreen) return undefined;
+
+    let cancelled = false;
+    let midnightTimerId;
+
+    const runDailyIfNeeded = async (source) => {
+      if (cancelled || !shouldRunDailyAuto()) return;
+      markAutoRunToday();
+      await runMonitorRefresh(source);
+    };
+
+    const scheduleMidnight = () => {
+      midnightTimerId = window.setTimeout(async () => {
+        if (cancelled) return;
+        markAutoRunToday();
+        await runMonitorRefresh('midnight');
+        scheduleMidnight();
+      }, msUntilNextLocalMidnight());
+    };
+
+    scheduleMidnight();
+    const catchUpTimerId = window.setTimeout(() => runDailyIfNeeded('auto'), 400);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(midnightTimerId);
+      window.clearTimeout(catchUpTimerId);
+    };
+  }, [fullscreen, runMonitorRefresh]);
 
   const sendPrompt = async (rawPrompt) => {
     const prompt = rawPrompt.trim();
-    if (!prompt || isLoading) return;
+    if (!prompt || isLoading || isRefreshing) return;
 
     const nextMessages = [...messages, { role: 'user', content: prompt }];
     setMessages(nextMessages);
@@ -34,99 +136,11 @@ export default function MigrationAgentChat({ compact = false }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/migration-agent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: nextMessages, stream: true }),
-      });
-
-      const contentType = response.headers.get('content-type') || '';
-
-      if (contentType.includes('ndjson')) {
-        if (!response.ok) {
-          throw new Error('Не удалось открыть поток ответа агента.');
-        }
-        setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
-
-        const reader = response.body?.getReader();
-        if (!reader) {
-          throw new Error('Браузер не поддерживает потоковое чтение ответа.');
-        }
-        const dec = new TextDecoder();
-        let buf = '';
-        let gotToken = false;
-        let streamEnded = false;
-
-        while (!streamEnded) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buf += dec.decode(value, { stream: true });
-          for (;;) {
-            const nl = buf.indexOf('\n');
-            if (nl < 0) break;
-            const line = buf.slice(0, nl).trim();
-            buf = buf.slice(nl + 1);
-            if (!line) continue;
-            let row;
-            try {
-              row = JSON.parse(line);
-            } catch {
-              continue;
-            }
-            if (row.type === 'error') {
-              throw new Error(row.message || 'Ошибка потока агента.');
-            }
-            if (row.type === 'done') {
-              streamEnded = true;
-              break;
-            }
-            if (row.type === 'token' && typeof row.text === 'string' && row.text.length) {
-              gotToken = true;
-              const chunk = row.text;
-              setMessages((prev) => {
-                const out = [...prev];
-                const i = out.length - 1;
-                if (out[i]?.role === 'assistant') {
-                  out[i] = { ...out[i], content: out[i].content + chunk };
-                }
-                return out;
-              });
-            }
-          }
-        }
-
-        if (!gotToken) {
-          setMessages((prev) => {
-            const last = prev[prev.length - 1];
-            if (last?.role === 'assistant' && !last.content.trim()) return prev.slice(0, -1);
-            return prev;
-          });
-          throw new Error('AI-агент вернул пустой ответ.');
-        }
-      } else {
-        const payload = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          const fallback =
-            response.status === 404
-              ? 'Локальный API не найден. Перезапустите dev-сервер после обновления конфигурации.'
-              : 'Не удалось получить ответ от AI-агента.';
-          throw new Error(payload?.error || fallback);
-        }
-
-        const assistantText = payload?.reply?.trim();
-        if (!assistantText) {
-          throw new Error('AI-агент вернул пустой ответ.');
-        }
-
-        setMessages((prev) => [...prev, { role: 'assistant', content: assistantText }]);
-      }
+      const { reply } = await fetchMigrationMonitor(nextMessages);
+      setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
+      setLastUpdatedAt(new Date().toISOString());
     } catch (err) {
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        if (last?.role === 'assistant' && !last.content.trim()) return prev.slice(0, -1);
-        return prev;
-      });
-      setError(err?.message || 'Ошибка запроса к AI-агенту.');
+      setError(err?.message || 'Ошибка запроса к агенту мониторинга.');
     } finally {
       setIsLoading(false);
     }
@@ -137,31 +151,52 @@ export default function MigrationAgentChat({ compact = false }) {
     await sendPrompt(input);
   };
 
-  const chatHeight = compact ? 'h-[min(42vh,360px)]' : 'h-[min(60vh,560px)]';
+  const busy = isLoading || isRefreshing;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col space-y-3">
+    <div className="mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        {!fullscreen && lastUpdatedAt ? (
+          <p className="text-xs text-slate-500">Последнее обновление: {formatUpdatedLabel(lastUpdatedAt)}</p>
+        ) : (
+          <span className="text-xs text-slate-500">История сохраняется в браузере</span>
+        )}
+        <button
+          type="button"
+          onClick={handleClearHistory}
+          disabled={isLoading || isRefreshing}
+          className="text-xs font-medium text-slate-500 underline decoration-slate-300 underline-offset-2 hover:text-slate-800 disabled:opacity-50"
+        >
+          Очистить историю
+        </button>
+      </div>
+
       <div className="flex flex-wrap gap-2">
         {STARTER_PROMPTS.map((prompt) => (
           <button
             key={prompt}
             type="button"
             onClick={() => sendPrompt(prompt)}
-            disabled={isLoading}
+            disabled={busy}
             className="rounded-full border border-sky-200 bg-white px-3 py-1.5 text-xs font-medium text-sky-800 transition hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {compact && prompt.length > 48 ? `${prompt.slice(0, 48)}…` : prompt}
+            {fullscreen && prompt.length > 56 ? `${prompt.slice(0, 56)}…` : prompt}
           </button>
         ))}
       </div>
 
-      <div className={`${chatHeight} min-h-[200px] flex-1 space-y-3 overflow-y-auto rounded-xl border border-sky-100 bg-white p-3 sm:p-4`}>
+      <div
+        className={[
+          'min-h-0 flex-1 space-y-3 overflow-y-auto rounded-xl border border-sky-100 bg-white p-3 shadow-inner sm:p-5',
+          fullscreen ? '' : 'h-[min(60vh,560px)]',
+        ].join(' ')}
+      >
         {messages.map((message, idx) => {
           const isUser = message.role === 'user';
           return (
             <article
               key={`${message.role}-${idx}`}
-              className={`max-w-[95%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+              className={`max-w-[min(100%,52rem)] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm sm:text-[15px] ${
                 isUser
                   ? 'ml-auto border border-sky-300 bg-sky-600 text-white'
                   : 'mr-auto border border-slate-200 bg-slate-50 text-slate-800'
@@ -174,29 +209,29 @@ export default function MigrationAgentChat({ compact = false }) {
             </article>
           );
         })}
-        {isLoading && messages[messages.length - 1]?.role !== 'assistant' ? (
-          <div className="mr-auto max-w-[95%] rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 shadow-sm">
-            Анализирую источники и формирую ответ...
+        {busy ? (
+          <div className="mr-auto max-w-[min(100%,52rem)] rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 shadow-sm">
+            Сверяю датасеты дашборда с baseline…
           </div>
         ) : null}
       </div>
 
-      <form onSubmit={handleSubmit} className="shrink-0 space-y-2">
+      <form onSubmit={handleSubmit} className="shrink-0 space-y-2 border-t border-sky-100 pt-3">
         <label htmlFor={inputId} className="text-xs font-medium uppercase tracking-wide text-slate-500">
           Вопрос агенту
         </label>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <input
             id={inputId}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Например: проверь новые публикации Eurostat..."
-            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-200"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-200"
           />
           <button
             type="submit"
-            disabled={isLoading || !input.trim()}
-            className="shrink-0 rounded-lg bg-sky-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+            disabled={busy || !input.trim()}
+            className="shrink-0 rounded-lg bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-800 disabled:cursor-not-allowed disabled:bg-slate-400"
           >
             Отправить
           </button>
@@ -206,15 +241,9 @@ export default function MigrationAgentChat({ compact = false }) {
       {error ? (
         <div className="shrink-0 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
           <p>{error}</p>
-          {needsOllamaSetup ? (
+          {needsMonitorHint ? (
             <p className="mt-1 text-xs text-red-800/90">
-              Установите Ollama: <code>ollama pull llama3.2:3b</code>, <code>ollama serve</code> (быстрее, чем
-              8b). Для полного скана источников укажите в вопросе «Eurostat» или «мониторинг».
-            </p>
-          ) : null}
-          {needsApiKeySetup ? (
-            <p className="mt-1 text-xs text-red-800/90">
-              Для локального запуска добавьте ключ в <code>.env.local</code> и перезапустите dev-сервер.
+              Проверьте интернет или запустите <code>npm run monitor</code> локально.
             </p>
           ) : null}
         </div>

@@ -65,10 +65,7 @@ export default function EuFertilityRateCard() {
       className="relative overflow-visible rounded-2xl border border-sky-200/90 bg-white shadow-[0_8px_30px_rgba(14,165,233,0.12)]"
     >
       <div className="relative px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6 lg:px-12">
-        <p className="mb-1 w-full text-left text-base font-semibold text-black sm:text-lg">{meta.title}</p>
-        <p className="mb-4 text-left text-xs text-slate-600 sm:text-sm">
-          Средний суммарный коэффициент рождаемости во всём ЕС, 27 государств-членов (1960–2024)
-        </p>
+        <p className="mb-4 w-full text-left text-base font-semibold text-black sm:text-lg">{meta.title}</p>
 
         <div className="h-[380px] w-full sm:h-[440px] lg:h-[480px]">
           <ResponsiveContainer width="100%" height="100%" minHeight={360}>
