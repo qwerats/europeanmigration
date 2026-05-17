@@ -1,4 +1,5 @@
 import EuPopulationProjectionCard from './EuPopulationProjectionCard';
+import EuFertilityRateCard from './EuFertilityRateCard';
 
 export default function Statistics() {
   return (
@@ -17,6 +18,7 @@ export default function Statistics() {
       </div>
 
       <EuPopulationProjectionCard />
+      <EuFertilityRateCard />
     </div>
   );
 }
