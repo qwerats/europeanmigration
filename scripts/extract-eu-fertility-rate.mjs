@@ -111,7 +111,7 @@ const data = years.map((year) => {
 const payload = {
   meta: {
     title: 'Рождаемость (рождений на женщину)',
-    yAxisLabel: 'Рождений на женщину',
+    yAxisLabel: 'Количество детей на женщину',
     xAxisLabel: 'Год',
     sourceLabel:
       'Источник: World Bank, World Development Indicators — SP.DYN.TFRT.IN (Fertility rate, total). 27 государств-членов ЕС.',
