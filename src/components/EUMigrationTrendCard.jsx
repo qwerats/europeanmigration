@@ -113,14 +113,14 @@ export default function EUMigrationTrendCard() {
         </h2>
       </div>
 
-      <div className="relative px-2 pb-3 pt-3 sm:px-4 sm:pb-4 sm:pt-4">
-        <p className="mx-auto mb-4 max-w-4xl px-1 text-left text-sm leading-relaxed text-gray-700 sm:px-2 sm:text-base">
+      <div className="relative px-4 pb-3 pt-4 sm:px-8 sm:pb-4 sm:pt-5 lg:px-12">
+        <p className="mb-4 w-full px-1 text-left text-base font-medium leading-relaxed text-gray-800 sm:px-2 sm:text-lg sm:leading-loose lg:text-xl lg:leading-relaxed">
           Миграционный кризис 2015 г., а затем резкое увеличение числа мигрантов в 2022 г. стала причиной
           «кризиса солидарности». Фактически это означает, разногласия и неспособность выработки общей
           миграционной политики среди государств Европы; а также невозможность донесения содержания мер до
           общественности.
         </p>
-        <p className="mx-auto mb-4 max-w-4xl px-1 text-left text-sm leading-relaxed text-gray-700 sm:px-2 sm:text-base">
+        <p className="mb-4 w-full px-1 text-left text-base font-medium leading-relaxed text-gray-800 sm:px-2 sm:text-lg sm:leading-loose lg:text-xl lg:leading-relaxed">
           Основными тенденциями миграции в ЕС являются: приоритет рестриктивной политики над превентивным
           подходом; зависимость миграции от появления «чёрных лебедей» (гражданская война в Сирии с 2011 г.,
           арабская война, Украинский кризис и COVID-19).
@@ -248,8 +248,8 @@ export default function EUMigrationTrendCard() {
         <p className="mt-2 text-center text-[10px] text-slate-400 sm:text-[11px]">
           Нажмите на график — увеличить или свернуть
         </p>
-        <p className="mx-auto mt-4 max-w-4xl px-1 text-left text-xs leading-relaxed text-slate-600 sm:px-2 sm:text-sm">
-          <span className="font-semibold text-slate-700">Примечание.</span> Если на графике общего количества
+        <p className="mt-4 w-full px-1 text-left text-base font-medium leading-relaxed text-gray-800 sm:px-2 sm:text-lg sm:leading-loose lg:text-xl lg:leading-relaxed">
+          <span className="font-semibold text-gray-900">Примечание.</span> Если на графике общего количества
           мигрантов влияние Сирийского миграционного кризиса не так очевидно, то впоследствии графики
           пересечения внешних границ и аналитика роста по странам докажут обратное.
         </p>

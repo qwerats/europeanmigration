@@ -22,9 +22,9 @@ export default function Dashboard() {
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           Миграционный дэшборд
         </h2>
-        <div className="glass-panel w-full rounded-2xl border border-sky-200/90 border-l-4 border-l-sky-500 px-6 py-6 text-left shadow-[0_8px_30px_rgba(14,165,233,0.12)] sm:px-8 sm:py-7">
-          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700">Определение</p>
-          <p className="mt-3 text-sm leading-relaxed text-gray-700 sm:text-base">
+        <div className="glass-panel w-full rounded-2xl border border-sky-200/90 border-l-4 border-l-sky-500 px-6 py-8 text-left shadow-[0_8px_30px_rgba(14,165,233,0.12)] sm:px-10 sm:py-10 lg:px-12 lg:py-12">
+          <p className="text-xs font-semibold uppercase tracking-wider text-sky-700 sm:text-sm">Определение</p>
+          <p className="mt-4 w-full text-base font-medium leading-relaxed text-gray-800 sm:text-lg sm:leading-loose lg:text-xl lg:leading-relaxed">
             <span className="font-semibold text-gray-900">Мигрант</span> — любое лицо, которое перемещается
             через международную границу или внутри государства и покинуло место своего обычного жительства,
             независимо от юридического статуса лица; характера перемещения (добровольно / недобровольно);
