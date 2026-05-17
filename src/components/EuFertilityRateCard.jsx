@@ -11,13 +11,15 @@ import {
 } from 'recharts';
 import dataset from '../data/euFertilityRateByCountry.json';
 
-const { meta, series: allSeries, data: chartData } = dataset;
+const { meta, series: allSeries, data: rawChartData } = dataset;
 
+const LAST_YEAR = 2024;
+const chartData = rawChartData.filter((row) => Number(row.year) <= LAST_YEAR);
 const EU27_SERIES = allSeries.filter((s) => s.dataKey !== 'EUU');
 const X_TICKS = [1960, 1970, 1980, 1990, 2000, 2010, 2020];
 const Y_DOMAIN = [1, 3];
 const Y_TICKS = [1, 1.5, 2, 2.5, 3];
-const DEFAULT_YEAR = chartData[chartData.length - 1]?.year ?? '2020';
+const DEFAULT_YEAR = String(LAST_YEAR);
 
 function formatRate(v) {
   if (typeof v !== 'number' || Number.isNaN(v)) return '—';
@@ -117,7 +119,7 @@ export default function EuFertilityRateCard() {
       <div className="relative px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6 lg:px-12">
         <p className="mb-1 w-full text-left text-base font-semibold text-black sm:text-lg">{meta.title}</p>
         <p className="mb-4 text-left text-xs text-slate-600 sm:text-sm">
-          Суммарный коэффициент рождаемости, 27 государств-членов ЕС (1960–2025)
+          Суммарный коэффициент рождаемости, 27 государств-членов ЕС (1960–2024)
         </p>
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_min(100%,280px)] lg:gap-5">
@@ -134,7 +136,7 @@ export default function EuFertilityRateCard() {
                 <XAxis
                   type="number"
                   dataKey="year"
-                  domain={[1960, 2025]}
+                  domain={[1960, LAST_YEAR]}
                   ticks={X_TICKS}
                   tick={{ fill: '#64748b', fontSize: 11 }}
                   axisLine={{ stroke: '#cbd5e1' }}

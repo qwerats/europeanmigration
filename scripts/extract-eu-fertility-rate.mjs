@@ -61,7 +61,7 @@ const header = rows[3];
 const yearIndices = [];
 for (let c = 4; c < header.length; c++) {
   const year = Number(header[c]);
-  if (Number.isFinite(year) && year >= 1960 && year <= 2030) yearIndices.push({ year, col: c });
+  if (Number.isFinite(year) && year >= 1960 && year <= 2024) yearIndices.push({ year, col: c });
 }
 
 const countryRows = rows.slice(4).filter((r) => EU27_CODES.includes(String(r[1])) || r[1] === 'EUU');
