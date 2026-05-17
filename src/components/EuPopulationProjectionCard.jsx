@@ -29,8 +29,29 @@ const chartTooltip = {
 };
 
 function formatMln(v) {
-  if (typeof v !== 'number' || Number.isNaN(v)) return 'тАФ';
+  if (typeof v !== 'number' || Number.isNaN(v)) return '—';
   return v.toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}
+
+function PopulationProjectionTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+  const items = [...payload].sort((a, b) => Number(b.value) - Number(a.value));
+
+  return (
+    <div
+      className="rounded-[10px] border border-sky-200/90 bg-white px-3 py-2 text-xs text-slate-900 shadow-sm"
+      style={chartTooltip.contentStyle}
+    >
+      <p className="mb-1.5 font-medium text-slate-900">{`Год ${label}`}</p>
+      <ul className="space-y-0.5">
+        {items.map((entry) => (
+          <li key={entry.dataKey} style={{ color: entry.color }}>
+            {`${entry.name}: ${formatMln(Number(entry.value))} млн`}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default function EuPopulationProjectionCard() {
@@ -99,11 +120,7 @@ export default function EuPopulationProjectionCard() {
                   style: { textAnchor: 'middle' },
                 }}
               />
-              <Tooltip
-                {...chartTooltip}
-                formatter={(val, name) => [`${formatMln(val)} ╨╝╨╗╨╜`, name]}
-                labelFormatter={(l) => `╨У╨╛╨┤ ${l}`}
-              />
+              <Tooltip content={<PopulationProjectionTooltip />} />
               <Legend
                 verticalAlign="bottom"
                 align="center"
