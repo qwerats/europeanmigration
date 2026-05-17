@@ -58,10 +58,10 @@ export default function EuPopulationProjectionCard() {
       className="relative overflow-visible rounded-2xl border border-sky-200/90 bg-white shadow-[0_8px_30px_rgba(14,165,233,0.12)]"
     >
       <div className="relative px-2 pb-3 pt-5 sm:px-4 sm:pb-4 sm:pt-6">
-        <p className="mx-auto mb-3 max-w-4xl px-1 text-left text-base font-semibold text-black sm:px-2 sm:text-lg">
+        <p className="mb-3 w-full px-1 text-left text-base font-semibold text-black sm:px-2 sm:text-lg">
           {meta.title}
         </p>
-        <div className="mx-auto h-[380px] w-full max-w-4xl sm:h-[420px]">
+        <div className="h-[400px] w-full sm:h-[460px]">
           <ResponsiveContainer width="100%" height="100%" minHeight={360}>
             <LineChart data={chartData} margin={{ top: 12, right: 20, left: 8, bottom: 56 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.4)" vertical={false} />

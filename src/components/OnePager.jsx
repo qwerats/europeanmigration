@@ -18,6 +18,7 @@ export default function OnePager() {
       {SECTIONS.map(({ id, Component }) => {
         const isIntro = id === 'intro';
         const isFirstLight = id === 'introduction';
+        const isFullWidth = id === 'statistics';
         return (
           <section
             key={id}
@@ -32,7 +33,7 @@ export default function OnePager() {
             {isIntro ? (
               <Component />
             ) : (
-              <div className="mx-auto max-w-7xl">
+              <div className={isFullWidth ? 'w-full min-w-0' : 'mx-auto max-w-7xl'}>
                 <Component />
               </div>
             )}
