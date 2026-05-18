@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAiAssistant } from '../context/AiAssistantContext';
 import { SITE_NAV_LINKS } from '../data/siteNavLinks';
 
 function scrollToSection(id) {
@@ -15,7 +14,6 @@ export default function SiteMapBar({ linkClass = '' }) {
   const rootRef = useRef(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { openAssistant } = useAiAssistant();
 
   useEffect(() => {
     if (!open) return undefined;
@@ -44,9 +42,7 @@ export default function SiteMapBar({ linkClass = '' }) {
   };
 
   const openAi = () => {
-    setOpen(false);
-    if (pathname !== '/') navigate('/');
-    openAssistant();
+    goToSection('ai-assistant');
   };
 
   return (

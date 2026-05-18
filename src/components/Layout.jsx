@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
-import { AiAssistantProvider, useAiAssistant } from '../context/AiAssistantContext';
 import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
-import AiAssistantWindow from './AiAssistantWindow';
+import { scrollToAiAssistant } from '../utils/scrollToAiAssistant';
 import SiteFooter from './SiteFooter';
+import SiteIntroHeader from './SiteIntroHeader';
 
-const SECTION_IDS = ['intro', 'introduction', 'home', 'statistics'];
+const SECTION_IDS = ['intro', 'introduction', 'home', 'statistics', 'ai-assistant'];
 
 const nav = [
   { id: 'home', label: 'Главная' },
@@ -23,7 +23,6 @@ function scrollSectionIntoView(id) {
 function LayoutShell({ children }) {
   const { pathname, hash } = useLocation();
   const navigate = useNavigate();
-  const { isOpen, openAssistant, toggleAssistant } = useAiAssistant();
   const [activeId, setActiveId] = useState('intro');
 
   const isOnePager = pathname === '/';
@@ -71,8 +70,12 @@ function LayoutShell({ children }) {
     e.preventDefault();
     const { id, action } = item;
     if (action === 'ai') {
-      if (pathname !== '/') navigate('/');
-      openAssistant();
+      if (pathname !== '/') {
+        navigate({ pathname: '/', hash: 'ai-assistant' });
+        return;
+      }
+      navigate({ pathname: '/', hash: 'ai-assistant' }, { replace: true });
+      window.setTimeout(() => scrollToAiAssistant(), 50);
       return;
     }
     if (isOnePager) {
@@ -136,32 +139,11 @@ function LayoutShell({ children }) {
         </header>
       ) : null}
 
-      <main className="w-full max-w-none px-0 py-0">{children}</main>
+      <SiteIntroHeader />
 
-      <AiAssistantWindow />
-
-      <button
-        type="button"
-        onClick={toggleAssistant}
-        className={[
-          'fixed bottom-5 right-5 z-[90] inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold shadow-lg backdrop-blur transition hover:scale-[1.02]',
-          isOpen
-            ? 'border-sky-500 bg-sky-600 text-white hover:bg-sky-700'
-            : 'border-sky-300 bg-white/95 text-sky-800 hover:bg-sky-50',
-        ].join(' ')}
-        aria-label={isOpen ? 'Закрыть ИИ-ассистента' : 'Открыть ИИ-ассистента'}
-        aria-expanded={isOpen}
-      >
-        <span
-          className={[
-            'inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold',
-            isOpen ? 'bg-white text-sky-700' : 'bg-sky-600 text-white',
-          ].join(' ')}
-        >
-          AI
-        </span>
-        {isOpen ? 'Закрыть' : 'ИИ-ассистент'}
-      </button>
+      <main className="w-full max-w-none scroll-pt-[var(--intro-site-header-h)] px-0 pb-0 pt-[var(--intro-site-header-h)]">
+        {children}
+      </main>
 
       <SiteFooter />
     </div>
@@ -169,9 +151,5 @@ function LayoutShell({ children }) {
 }
 
 export default function Layout({ children }) {
-  return (
-    <AiAssistantProvider>
-      <LayoutShell>{children}</LayoutShell>
-    </AiAssistantProvider>
-  );
+  return <LayoutShell>{children}</LayoutShell>;
 }

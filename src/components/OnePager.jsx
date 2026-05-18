@@ -1,17 +1,19 @@
-import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import IntroPage from './IntroPage';
 import IntroductionSection from './IntroductionSection';
 import Dashboard from './Dashboard';
 import Statistics from './Statistics';
+import EuMigrationAgentChat from './EuMigrationAgentChat';
+
 const SECTIONS = [
   { id: 'intro', Component: IntroPage },
   { id: 'introduction', Component: IntroductionSection },
   { id: 'home', Component: Dashboard },
   { id: 'statistics', Component: Statistics },
+  { id: 'ai-assistant', Component: EuMigrationAgentChat },
 ];
 
 export default function OnePager() {
-  const scrollMt = SHOW_SITE_HEADER ? 'scroll-mt-32' : 'scroll-mt-4';
+  const scrollMt = 'scroll-mt-[var(--intro-site-header-h)]';
 
   return (
     <div className="w-full">

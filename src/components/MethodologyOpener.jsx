@@ -1,16 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAiAssistant } from '../context/AiAssistantContext';
 
-/** Открывает плавающее окно агента и возвращает на главную. */
+/** Переход к секции ИИ-ассистента на главной. */
 export default function MethodologyOpener() {
   const navigate = useNavigate();
-  const { openAssistant } = useAiAssistant();
 
   useEffect(() => {
-    openAssistant();
-    navigate('/', { replace: true });
-  }, [openAssistant, navigate]);
+    navigate({ pathname: '/', hash: 'ai-assistant' }, { replace: true });
+  }, [navigate]);
 
   return null;
 }

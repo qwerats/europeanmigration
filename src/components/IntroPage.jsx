@@ -1,21 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
+import { useNavigate } from 'react-router-dom';
 import { publicUrl } from '../utils/publicUrl';
 import { attachParticleNetwork } from '../utils/particleNetworkCanvas.js';
-import SiteMapBar from './SiteMapBar';
-const INTRO_LINKS = [
-  { label: 'Домой', scrollToId: 'intro' },
-  { label: 'О сайте', to: '/about' },
-  { label: 'Контакты', to: '/contact' },
-  { label: 'Источники', to: '/resources' },
-];
 
-const linkClass =
-  'transition hover:text-[#103772] hover:underline hover:decoration-sky-400 hover:underline-offset-4';
-
-/** Высота плашки (синяя + белая) — отступ для контента под fixed-баром */
-const INTRO_BAR_PT = SHOW_SITE_HEADER ? 'pt-[13.5rem]' : 'pt-40';
+const HERO_MIN_H = 'min-h-[calc(100vh-var(--intro-site-header-h))]';
 
 export default function IntroPage() {
   const navigate = useNavigate();
@@ -26,8 +14,7 @@ export default function IntroPage() {
     if (!canvas) return undefined;
     return attachParticleNetwork(canvas);
   }, []);
-  const sectionMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
-  const heroMinH = SHOW_SITE_HEADER ? 'min-h-[calc(100vh-6.5rem)]' : 'min-h-screen';
+
   const goToSection = (id) => {
     if (id === 'intro') {
       navigate({ pathname: '/', hash: '' });
@@ -42,49 +29,9 @@ export default function IntroPage() {
 
   return (
     <section
-      className={`relative ${sectionMinH} w-full min-w-0 max-w-none overflow-x-hidden bg-[#0a1a32] text-slate-900`}
+      className={`relative ${HERO_MIN_H} w-full min-w-0 max-w-none overflow-x-hidden bg-[#0a1a32] text-slate-900`}
     >
-      <div
-        className={`fixed left-0 right-0 shadow-[0_4px_20px_rgba(0,0,0,0.12)] ${
-          SHOW_SITE_HEADER ? 'top-24 z-40' : 'top-0 z-[55]'
-        }`}
-      >
-        <div className="border-b border-slate-300 bg-[#103772] py-3">
-          <div className="mx-auto flex max-w-6xl justify-center">
-            <img
-              src={publicUrl('branding/migration-logo.svg')}
-              alt="Логотип проекта"
-              className="h-14 w-14 rounded-xl bg-white p-1 shadow-md"
-            />
-          </div>
-        </div>
-
-        <nav className="border-b border-slate-300 bg-white" aria-label="Навигация вступления">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#1c3767]">
-            {INTRO_LINKS.map((item) =>
-              item.scrollToId ? (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={() => goToSection(item.scrollToId)}
-                  className={`cursor-pointer bg-transparent font-semibold uppercase tracking-wide text-[#1c3767] ${linkClass}`}
-                >
-                  {item.label}
-                </button>
-              ) : (
-                <Link key={item.label} to={item.to} className={linkClass}>
-                  {item.label}
-                </Link>
-              )
-            )}
-            <SiteMapBar linkClass={linkClass} />
-          </div>
-        </nav>
-      </div>
-
-      <div
-        className={`hero flex w-full min-w-0 items-end justify-center ${INTRO_BAR_PT} ${heroMinH}`}
-      >
+      <div className={`hero flex w-full min-w-0 items-end justify-center ${HERO_MIN_H}`}>
         <canvas
           id="particleCanvas"
           ref={particleCanvasRef}

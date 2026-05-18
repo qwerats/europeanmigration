@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --intro-site-header-h: 8.75rem;
+  }
+
   html {
     @apply antialiased;
   }

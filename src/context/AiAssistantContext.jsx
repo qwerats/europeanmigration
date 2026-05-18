@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 
 const AiAssistantContext = createContext(null);
 
@@ -30,15 +30,6 @@ export function AiAssistantProvider({ children }) {
       setIsRefreshing(false);
     }
   }, []);
-
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, [isOpen]);
 
   const value = useMemo(
     () => ({

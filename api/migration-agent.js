@@ -42,7 +42,7 @@ function latestUserPrompt(messages) {
 }
 
 /**
- * Агент мониторинга: сравнение JSON дашборда с baseline (без Ollama / LLM).
+ * Агент мониторинга: сравнение JSON дашборда с baseline.
  * @returns {Promise<{ reply: string, report: object }>}
  */
 export async function runMigrationAgent(messages, options = {}) {
@@ -99,20 +99,4 @@ export async function runMigrationAgent(messages, options = {}) {
   return result;
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
-  }
-
-  try {
-    const { reply, report } = await runMigrationAgent(req.body?.messages, {
-      writeFiles: req.body?.writeFiles,
-      saveChatHistory: req.body?.saveChatHistory,
-    });
-    return res.status(200).json({ reply, report });
-  } catch (error) {
-    return res.status(error?.status || 500).json({
-      error: error?.message || 'Внутренняя ошибка сервера.',
-    });
-  }
-}
+export { handleMigrationAgentHttp as default } from './migration-api-http.js';

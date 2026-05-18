@@ -1,3 +1,5 @@
+import { resolveMigrationAgentApiUrl } from './migrationApiUrl';
+
 const AUTO_MONITOR_PROMPT =
   'Запусти плановый мониторинг всех датасетов дашборда и перечисли изменения.';
 
@@ -39,7 +41,14 @@ export function msUntilNextLocalMidnight() {
 }
 
 export async function fetchMigrationMonitor(messages) {
-  const response = await fetch('/api/migration-agent', {
+  const apiUrl = resolveMigrationAgentApiUrl();
+  if (!apiUrl) {
+    throw new Error(
+      'Агент недоступен на GitHub Pages. Запустите npm run dev локально или задайте VITE_MIGRATION_API_URL на деплой Vercel (например https://your-app.vercel.app).'
+    );
+  }
+
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages, saveChatHistory: true }),
@@ -49,7 +58,7 @@ export async function fetchMigrationMonitor(messages) {
   if (!response.ok) {
     const fallback =
       response.status === 404
-        ? 'Локальный API не найден. Запустите npm run dev и обновите страницу.'
+        ? 'API агента не найден. Запустите npm run dev или проверьте VITE_MIGRATION_API_URL.'
         : 'Не удалось получить ответ агента мониторинга.';
     throw new Error(payload?.error || fallback);
   }
