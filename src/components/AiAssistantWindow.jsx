@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAiAssistant } from '../context/AiAssistantContext';
-import ZapierAgentChatPanel from './ZapierAgentChatPanel';
+import OnSpaceAgentEmbed from './OnSpaceAgentEmbed';
 
 export default function AiAssistantWindow() {
   const { isOpen, closeAssistant } = useAiAssistant();
@@ -42,7 +42,7 @@ export default function AiAssistantWindow() {
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-3 py-3 sm:px-6 sm:py-4">
-        <ZapierAgentChatPanel />
+        <OnSpaceAgentEmbed fill className="min-h-0 flex-1" />
       </div>
     </aside>
   );
