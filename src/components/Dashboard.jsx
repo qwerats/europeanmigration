@@ -30,7 +30,7 @@ export default function Dashboard() {
         <MigrationRoutesMapFigure />
         <MediterraneanRoutesStackedBar />
         <p className="mx-auto max-w-4xl px-4 py-6 text-left text-xl font-bold leading-relaxed text-gray-900 sm:px-6 sm:py-8 sm:text-2xl sm:leading-snug">
-          Германия остаётся лидером по привлечению мигрантов на протяжении 10 лет (с 2010 по 2025).
+          Германия остаётся лидером по привлечению мигрантов на протяжении 15 лет (с 2010 по 2025).
         </p>
         <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
           <div className="min-w-0">

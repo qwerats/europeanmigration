@@ -1,10 +1,10 @@
-import { ONSPACE_AGENT_URL } from '../config/onSpaceAgent';
+import { AI_AGENT_TITLE, ONSPACE_AGENT_URL } from '../config/onSpaceAgent';
 
 export default function OnSpaceAgentEmbed({
   className = '',
   minHeight = 800,
   fill = false,
-  title = 'ИИ-ассистент по миграции в ЕС',
+  title = AI_AGENT_TITLE,
 }) {
   const sizeStyle = fill ? undefined : { minHeight: `${minHeight}px` };
 
@@ -20,15 +20,17 @@ export default function OnSpaceAgentEmbed({
       style={sizeStyle}
       aria-label={title}
     >
-      <iframe
-        src={ONSPACE_AGENT_URL}
-        title={title}
-        className="onspace-agent-embed__iframe"
-        style={sizeStyle}
-        frameBorder="0"
-        allow="microphone; camera; clipboard-write; fullscreen"
-        allowFullScreen
-      />
+      <div className="onspace-agent-embed__viewport" style={sizeStyle}>
+        <iframe
+          src={ONSPACE_AGENT_URL}
+          title={title}
+          className="onspace-agent-embed__iframe"
+          style={sizeStyle}
+          frameBorder="0"
+          allow="microphone; camera; clipboard-write; fullscreen"
+          allowFullScreen
+        />
+      </div>
     </section>
   );
 }

@@ -1,0 +1,143 @@
+.heygen-avatar-floating {
+  position: fixed;
+  top: calc(var(--intro-site-header-h, 8.75rem) + 12px);
+  right: max(16px, env(safe-area-inset-right, 0px));
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.heygen-avatar-floating > * {
+  pointer-events: auto;
+}
+
+.heygen-avatar-floating__fab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    0 10px 28px rgba(14, 165, 233, 0.45),
+    0 2px 8px rgba(15, 23, 42, 0.12);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.heygen-avatar-floating__fab:hover {
+  transform: translateY(2px);
+  box-shadow:
+    0 14px 32px rgba(14, 165, 233, 0.5),
+    0 4px 12px rgba(15, 23, 42, 0.14);
+}
+
+.heygen-avatar-floating__fab--active {
+  background: linear-gradient(135deg, #475569, #64748b);
+  box-shadow: 0 8px 20px rgba(71, 85, 105, 0.35);
+}
+
+.heygen-avatar-floating__fab-icon {
+  display: inline-flex;
+  width: 18px;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.heygen-avatar-floating__panel {
+  width: min(360px, calc(100vw - 32px));
+  overflow: hidden;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    0 20px 48px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(14, 165, 233, 0.12);
+}
+
+.heygen-avatar-floating__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.heygen-avatar-floating__panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.heygen-avatar-floating__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.heygen-avatar-floating__close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.heygen-avatar-floating__stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heygen-avatar-floating__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (max-width: 480px) {
+  .heygen-avatar-floating {
+    top: max(12px, env(safe-area-inset-top, 0px));
+  }
+
+  .heygen-avatar-floating__fab-label {
+    display: none;
+  }
+
+  .heygen-avatar-floating__fab {
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .heygen-avatar-floating__panel {
+    width: min(300px, calc(100vw - 24px));
+  }
+}

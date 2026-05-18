@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
 import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
 import { scrollToAiAssistant } from '../utils/scrollToAiAssistant';
+import HeyGenAvatarFloating from './HeyGenAvatarFloating';
 import SiteFooter from './SiteFooter';
 import SiteIntroHeader from './SiteIntroHeader';
 
@@ -146,6 +147,8 @@ function LayoutShell({ children }) {
       </main>
 
       <SiteFooter />
+
+      <HeyGenAvatarFloating />
     </div>
   );
 }

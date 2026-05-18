@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useAiAssistant } from '../context/AiAssistantContext';
+import { AI_AGENT_TITLE } from '../config/onSpaceAgent';
 import OnSpaceAgentEmbed from './OnSpaceAgentEmbed';
 
 export default function AiAssistantWindow() {
@@ -27,9 +28,8 @@ export default function AiAssistantWindow() {
         <div className="min-w-0 flex-1">
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-600">ИИ-ассистент</p>
           <h2 id="ai-assistant-title" className="text-lg font-bold text-gray-900 sm:text-xl">
-            Migration Monitor EU
+            {AI_AGENT_TITLE}
           </h2>
-          <p className="text-xs text-gray-600 sm:text-sm">Задайте вопрос по миграции и данным дашборда</p>
         </div>
         <button
           type="button"

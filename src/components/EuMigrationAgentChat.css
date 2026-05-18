@@ -30,6 +30,12 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
+.onspace-agent-embed__viewport {
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+}
+
 .onspace-agent-embed__iframe {
   display: block;
   width: 100%;
@@ -40,6 +46,13 @@
 }
 
 .onspace-agent-embed--fill {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.onspace-agent-embed--fill .onspace-agent-embed__viewport {
   flex: 1;
   min-height: 0;
   display: flex;
