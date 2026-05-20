@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --intro-site-header-h: 11.25rem;
+    --intro-site-header-h: 9rem;
   }
 
   html {

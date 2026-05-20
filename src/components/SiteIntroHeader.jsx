@@ -36,27 +36,27 @@ export default function SiteIntroHeader() {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-[55] shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
-      <div className="border-b border-slate-300 bg-[#103772] py-2 sm:py-2.5">
+      <div className="border-b border-slate-300 bg-[#103772] py-1 sm:py-1.5">
         <div className="mx-auto flex max-w-6xl justify-center px-4">
           <Link
             to="/"
             onClick={goHome}
-            className="rounded-xl outline-none ring-offset-2 ring-offset-[#103772] focus-visible:ring-2 focus-visible:ring-sky-300"
+            className="rounded-lg outline-none ring-offset-2 ring-offset-[#103772] focus-visible:ring-2 focus-visible:ring-sky-300"
             aria-label="На главную"
           >
             <img
               src={publicUrl(SITE_LOGO_SRC)}
               alt="Логотип проекта"
-              className="h-20 w-20 rounded-xl bg-white p-1 shadow-md sm:h-24 sm:w-24 md:h-28 md:w-28"
-              width={112}
-              height={112}
+              className="h-14 w-14 rounded-lg bg-white p-0.5 shadow-md sm:h-16 sm:w-16 md:h-18 md:w-18"
+              width={72}
+              height={72}
             />
           </Link>
         </div>
       </div>
 
       <nav className="border-b border-slate-300 bg-white" aria-label="Основная навигация сайта">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-3 text-sm font-semibold uppercase tracking-wide text-[#1c3767]">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-1.5 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#1c3767] sm:gap-x-8 sm:text-sm">
           {NAV_LINKS.map((item) => {
             if (item.type === 'home') {
               return (

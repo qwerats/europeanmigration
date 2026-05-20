@@ -6,6 +6,7 @@ import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
 import { scrollToAiAssistant } from '../utils/scrollToAiAssistant';
 import HeyGenAvatarFloating from './HeyGenAvatarFloating';
 import OnSpaceAgentFloating from './OnSpaceAgentFloating';
+import SiteMusicFloating from './SiteMusicFloating';
 import SiteFooter from './SiteFooter';
 import SiteIntroHeader from './SiteIntroHeader';
 
@@ -150,6 +151,7 @@ function LayoutShell({ children }) {
 
       <SiteFooter />
 
+      <SiteMusicFloating />
       <HeyGenAvatarFloating />
       <OnSpaceAgentFloating />
     </div>
