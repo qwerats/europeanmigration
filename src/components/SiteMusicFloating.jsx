@@ -28,111 +28,30 @@ function persistVolume(value) {
   }
 }
 
-function isMediaReady(audio) {
-  return audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA;
-}
-
 export default function SiteMusicFloating() {
   const audioRef = useRef(null);
-  const autoplayAttemptedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(readStoredVolume);
-  const [awaitingSoundUnlock, setAwaitingSoundUnlock] = useState(false);
 
   const musicSrc = publicUrl(SITE_BACKGROUND_MUSIC_PATH);
 
-  const unmuteAudio = useCallback((audio, level) => {
-    audio.muted = false;
-    audio.volume = level;
-    setAwaitingSoundUnlock(false);
-  }, []);
-
   const applyVolume = useCallback((nextVolume) => {
     const audio = audioRef.current;
-    if (audio) {
-      audio.volume = nextVolume;
-      if (nextVolume > 0) audio.muted = false;
-    }
+    if (audio) audio.volume = nextVolume;
     setVolume(nextVolume);
     persistVolume(nextVolume);
-    if (nextVolume > 0) setAwaitingSoundUnlock(false);
   }, []);
 
-  const playWithSound = useCallback(
-    async (level) => {
-      const audio = audioRef.current;
-      if (!audio) return false;
-
-      audio.muted = false;
-      audio.volume = level;
-
-      try {
-        if (audio.paused) await audio.play();
-        setIsPlaying(true);
-        setAwaitingSoundUnlock(false);
-        return true;
-      } catch {
-        setAwaitingSoundUnlock(true);
-        return false;
-      }
-    },
-    []
-  );
-
-  const startAutoplay = useCallback(async () => {
+  const playMusic = useCallback(async () => {
     const audio = audioRef.current;
-    if (!audio || autoplayAttemptedRef.current) return;
-
-    audio.loop = true;
+    if (!audio) return;
     audio.volume = volume;
-
-    const tryPlayAudible = async () => {
-      audio.muted = false;
-      audio.volume = volume;
-      try {
-        await audio.play();
-        setIsPlaying(true);
-        setAwaitingSoundUnlock(false);
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
-    const tryPlayMutedThenUnmute = async () => {
-      audio.muted = true;
-      audio.volume = volume;
-      try {
-        await audio.play();
-      } catch {
-        setAwaitingSoundUnlock(true);
-        return;
-      }
-
+    try {
+      await audio.play();
       setIsPlaying(true);
-
-      const unlockSound = () => {
-        audio.muted = false;
-        audio.volume = volume;
-        if (!audio.muted && !audio.paused) {
-          setAwaitingSoundUnlock(false);
-          return true;
-        }
-        return false;
-      };
-
-      if (unlockSound()) return;
-
-      window.setTimeout(() => {
-        if (unlockSound()) return;
-        setAwaitingSoundUnlock(true);
-      }, 120);
-    };
-
-    const audibleOk = await tryPlayAudible();
-    if (!audibleOk) await tryPlayMutedThenUnmute();
-
-    autoplayAttemptedRef.current = true;
+    } catch {
+      setIsPlaying(false);
+    }
   }, [volume]);
 
   const pauseMusic = useCallback(() => {
@@ -145,6 +64,9 @@ export default function SiteMusicFloating() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return undefined;
+
+    audio.loop = true;
+    audio.volume = volume;
 
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
@@ -159,59 +81,14 @@ export default function SiteMusicFloating() {
       audio.removeEventListener('pause', onPause);
       audio.removeEventListener('ended', onEnded);
     };
-  }, []);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return undefined;
-
-    const runAutoplay = () => {
-      void startAutoplay();
-    };
-
-    if (isMediaReady(audio)) {
-      runAutoplay();
-      return undefined;
-    }
-
-    audio.addEventListener('canplay', runAutoplay, { once: true });
-    return () => audio.removeEventListener('canplay', runAutoplay);
-  }, [startAutoplay]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) audio.volume = volume;
   }, [volume]);
-
-  useEffect(() => {
-    if (!awaitingSoundUnlock) return undefined;
-
-    const unlockOnGesture = () => {
-      const audio = audioRef.current;
-      if (!audio) return;
-      unmuteAudio(audio, volume);
-      if (audio.paused) {
-        void audio.play().then(() => setIsPlaying(true)).catch(() => {});
-      }
-    };
-
-    document.addEventListener('pointerdown', unlockOnGesture, { once: true, capture: true });
-    document.addEventListener('keydown', unlockOnGesture, { once: true, capture: true });
-    document.addEventListener('touchstart', unlockOnGesture, { once: true, capture: true });
-
-    return () => {
-      document.removeEventListener('pointerdown', unlockOnGesture, { capture: true });
-      document.removeEventListener('keydown', unlockOnGesture, { capture: true });
-      document.removeEventListener('touchstart', unlockOnGesture, { capture: true });
-    };
-  }, [awaitingSoundUnlock, unmuteAudio, volume]);
 
   const handleToggle = () => {
     if (isPlaying) {
       pauseMusic();
       return;
     }
-    void playWithSound(volume);
+    void playMusic();
   };
 
   const handleVolumeChange = (e) => {
@@ -221,15 +98,8 @@ export default function SiteMusicFloating() {
   };
 
   return (
-    <div
-      className="site-music-floating"
-      role="region"
-      aria-label="Фоновая музыка"
-      title={
-        awaitingSoundUnlock ? 'Нажмите на странице, чтобы включить звук' : undefined
-      }
-    >
-      <audio ref={audioRef} src={musicSrc} preload="auto" loop autoPlay playsInline />
+    <div className="site-music-floating" role="region" aria-label="Фоновая музыка">
+      <audio ref={audioRef} src={musicSrc} preload="auto" loop playsInline />
 
       <button
         type="button"
