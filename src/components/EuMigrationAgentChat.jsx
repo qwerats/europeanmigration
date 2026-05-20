@@ -16,7 +16,8 @@ export default function EuMigrationAgentChat() {
         <a href={ONSPACE_AGENT_URL} target="_blank" rel="noopener noreferrer">
           откройте агента в новой вкладке
         </a>
-        . Убедитесь, что проект опубликован в OnSpace.
+        . Также доступна кнопка <strong className="migration-chat-intro__kbd">«ИИ-агент»</strong> в правом
+        нижнем углу на любой странице.
       </p>
     </div>
   );

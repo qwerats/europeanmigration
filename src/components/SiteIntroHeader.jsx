@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { SITE_LOGO_SRC } from '../config/siteBranding';
 import { publicUrl } from '../utils/publicUrl';
 import SiteMapBar from './SiteMapBar';
 
@@ -35,8 +36,8 @@ export default function SiteIntroHeader() {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-[55] shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
-      <div className="border-b border-slate-300 bg-[#103772] py-3">
-        <div className="mx-auto flex max-w-6xl justify-center">
+      <div className="border-b border-slate-300 bg-[#103772] py-2 sm:py-2.5">
+        <div className="mx-auto flex max-w-6xl justify-center px-4">
           <Link
             to="/"
             onClick={goHome}
@@ -44,9 +45,11 @@ export default function SiteIntroHeader() {
             aria-label="На главную"
           >
             <img
-              src={publicUrl('branding/migration-logo.svg')}
+              src={publicUrl(SITE_LOGO_SRC)}
               alt="Логотип проекта"
-              className="h-14 w-14 rounded-xl bg-white p-1 shadow-md"
+              className="h-20 w-20 rounded-xl bg-white p-1 shadow-md sm:h-24 sm:w-24 md:h-28 md:w-28"
+              width={112}
+              height={112}
             />
           </Link>
         </div>

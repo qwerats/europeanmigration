@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SHOW_SITE_HEADER } from '../config/showSiteHeader';
+import { SITE_LOGO_SRC } from '../config/siteBranding';
 import { onePagerHashHref, publicUrl } from '../utils/publicUrl';
 import { scrollToAiAssistant } from '../utils/scrollToAiAssistant';
 import HeyGenAvatarFloating from './HeyGenAvatarFloating';
+import OnSpaceAgentFloating from './OnSpaceAgentFloating';
 import SiteFooter from './SiteFooter';
 import SiteIntroHeader from './SiteIntroHeader';
 
@@ -102,11 +104,11 @@ function LayoutShell({ children }) {
               className="flex min-w-0 items-center gap-3 sm:gap-4 rounded-lg outline-none ring-offset-2 ring-offset-white focus-visible:ring-2 focus-visible:ring-sky-400"
             >
               <img
-                src={publicUrl('branding/migration-logo.svg')}
+                src={publicUrl(SITE_LOGO_SRC)}
                 alt="Логотип: миграционные потоки ЕС"
-                className="h-16 w-16 shrink-0 rounded-xl border border-sky-200/90 bg-white p-1.5 shadow-md sm:h-20 sm:w-20"
-                width={80}
-                height={80}
+                className="h-20 w-20 shrink-0 rounded-xl border border-sky-200/90 bg-white p-1.5 shadow-md sm:h-24 sm:w-24"
+                width={96}
+                height={96}
               />
               <h1 className="min-w-0 text-base font-semibold leading-snug tracking-tight text-gray-900 sm:text-lg md:text-xl">
                 Миграционные потоки Европейского союза
@@ -149,6 +151,7 @@ function LayoutShell({ children }) {
       <SiteFooter />
 
       <HeyGenAvatarFloating />
+      <OnSpaceAgentFloating />
     </div>
   );
 }

@@ -21,6 +21,10 @@
   margin-bottom: 0;
 }
 
+.migration-chat-intro__kbd {
+  color: #0f766e;
+}
+
 .migration-chat-embed,
 .onspace-agent-embed {
   width: 100%;
