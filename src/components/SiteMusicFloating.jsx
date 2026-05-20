@@ -28,34 +28,111 @@ function persistVolume(value) {
   }
 }
 
+function isMediaReady(audio) {
+  return audio.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA;
+}
+
 export default function SiteMusicFloating() {
   const audioRef = useRef(null);
+  const autoplayAttemptedRef = useRef(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(readStoredVolume);
-  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [awaitingSoundUnlock, setAwaitingSoundUnlock] = useState(false);
 
   const musicSrc = publicUrl(SITE_BACKGROUND_MUSIC_PATH);
 
-  const applyVolume = useCallback((nextVolume) => {
-    const audio = audioRef.current;
-    if (audio) audio.volume = nextVolume;
-    setVolume(nextVolume);
-    persistVolume(nextVolume);
+  const unmuteAudio = useCallback((audio, level) => {
+    audio.muted = false;
+    audio.volume = level;
+    setAwaitingSoundUnlock(false);
   }, []);
 
-  const playMusic = useCallback(async () => {
+  const applyVolume = useCallback((nextVolume) => {
     const audio = audioRef.current;
-    if (!audio) return false;
-    audio.volume = volume;
-    try {
-      await audio.play();
-      setIsPlaying(true);
-      setAutoplayBlocked(false);
-      return true;
-    } catch {
-      setAutoplayBlocked(true);
-      return false;
+    if (audio) {
+      audio.volume = nextVolume;
+      if (nextVolume > 0) audio.muted = false;
     }
+    setVolume(nextVolume);
+    persistVolume(nextVolume);
+    if (nextVolume > 0) setAwaitingSoundUnlock(false);
+  }, []);
+
+  const playWithSound = useCallback(
+    async (level) => {
+      const audio = audioRef.current;
+      if (!audio) return false;
+
+      audio.muted = false;
+      audio.volume = level;
+
+      try {
+        if (audio.paused) await audio.play();
+        setIsPlaying(true);
+        setAwaitingSoundUnlock(false);
+        return true;
+      } catch {
+        setAwaitingSoundUnlock(true);
+        return false;
+      }
+    },
+    []
+  );
+
+  const startAutoplay = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio || autoplayAttemptedRef.current) return;
+
+    audio.loop = true;
+    audio.volume = volume;
+
+    const tryPlayAudible = async () => {
+      audio.muted = false;
+      audio.volume = volume;
+      try {
+        await audio.play();
+        setIsPlaying(true);
+        setAwaitingSoundUnlock(false);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    const tryPlayMutedThenUnmute = async () => {
+      audio.muted = true;
+      audio.volume = volume;
+      try {
+        await audio.play();
+      } catch {
+        setAwaitingSoundUnlock(true);
+        return;
+      }
+
+      setIsPlaying(true);
+
+      const unlockSound = () => {
+        audio.muted = false;
+        audio.volume = volume;
+        if (!audio.muted && !audio.paused) {
+          setAwaitingSoundUnlock(false);
+          return true;
+        }
+        return false;
+      };
+
+      if (unlockSound()) return;
+
+      window.setTimeout(() => {
+        if (unlockSound()) return;
+        setAwaitingSoundUnlock(true);
+      }, 120);
+    };
+
+    const audibleOk = await tryPlayAudible();
+    if (!audibleOk) await tryPlayMutedThenUnmute();
+
+    autoplayAttemptedRef.current = true;
   }, [volume]);
 
   const pauseMusic = useCallback(() => {
@@ -87,31 +164,19 @@ export default function SiteMusicFloating() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return undefined;
-    audio.loop = true;
-    audio.volume = volume;
 
-    let cancelled = false;
-
-    const startAutoplay = async () => {
-      if (cancelled) return;
-      try {
-        await audio.play();
-        if (!cancelled) {
-          setIsPlaying(true);
-          setAutoplayBlocked(false);
-        }
-      } catch {
-        if (!cancelled) setAutoplayBlocked(true);
-      }
+    const runAutoplay = () => {
+      void startAutoplay();
     };
 
-    void startAutoplay();
+    if (isMediaReady(audio)) {
+      runAutoplay();
+      return undefined;
+    }
 
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- autoplay once on mount
-  }, []);
+    audio.addEventListener('canplay', runAutoplay, { once: true });
+    return () => audio.removeEventListener('canplay', runAutoplay);
+  }, [startAutoplay]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -119,27 +184,34 @@ export default function SiteMusicFloating() {
   }, [volume]);
 
   useEffect(() => {
-    if (!autoplayBlocked) return undefined;
+    if (!awaitingSoundUnlock) return undefined;
 
-    const resumeOnGesture = () => {
-      void playMusic();
+    const unlockOnGesture = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      unmuteAudio(audio, volume);
+      if (audio.paused) {
+        void audio.play().then(() => setIsPlaying(true)).catch(() => {});
+      }
     };
 
-    document.addEventListener('pointerdown', resumeOnGesture, { once: true });
-    document.addEventListener('keydown', resumeOnGesture, { once: true });
+    document.addEventListener('pointerdown', unlockOnGesture, { once: true, capture: true });
+    document.addEventListener('keydown', unlockOnGesture, { once: true, capture: true });
+    document.addEventListener('touchstart', unlockOnGesture, { once: true, capture: true });
 
     return () => {
-      document.removeEventListener('pointerdown', resumeOnGesture);
-      document.removeEventListener('keydown', resumeOnGesture);
+      document.removeEventListener('pointerdown', unlockOnGesture, { capture: true });
+      document.removeEventListener('keydown', unlockOnGesture, { capture: true });
+      document.removeEventListener('touchstart', unlockOnGesture, { capture: true });
     };
-  }, [autoplayBlocked, playMusic]);
+  }, [awaitingSoundUnlock, unmuteAudio, volume]);
 
   const handleToggle = () => {
     if (isPlaying) {
       pauseMusic();
       return;
     }
-    void playMusic();
+    void playWithSound(volume);
   };
 
   const handleVolumeChange = (e) => {
@@ -153,9 +225,11 @@ export default function SiteMusicFloating() {
       className="site-music-floating"
       role="region"
       aria-label="Фоновая музыка"
-      title={autoplayBlocked ? 'Нажмите на странице, чтобы включить звук' : undefined}
+      title={
+        awaitingSoundUnlock ? 'Нажмите на странице, чтобы включить звук' : undefined
+      }
     >
-      <audio ref={audioRef} src={musicSrc} preload="auto" loop />
+      <audio ref={audioRef} src={musicSrc} preload="auto" loop autoPlay playsInline />
 
       <button
         type="button"
