@@ -1,10 +1,11 @@
-import { AI_AGENT_TITLE, ONSPACE_AGENT_URL } from '../config/onSpaceAgent';
+import { AI_AGENT_TITLE, buildOnSpaceAgentEmbedSrc } from '../config/onSpaceAgent';
 
 export default function OnSpaceAgentEmbed({
   className = '',
   minHeight = 800,
   fill = false,
   title = AI_AGENT_TITLE,
+  reloadKey = 0,
 }) {
   const sizeStyle = fill ? undefined : { minHeight: `${minHeight}px` };
 
@@ -22,7 +23,8 @@ export default function OnSpaceAgentEmbed({
     >
       <div className="onspace-agent-embed__viewport" style={sizeStyle}>
         <iframe
-          src={ONSPACE_AGENT_URL}
+          key={reloadKey}
+          src={buildOnSpaceAgentEmbedSrc()}
           title={title}
           className="onspace-agent-embed__iframe"
           style={sizeStyle}

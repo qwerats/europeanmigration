@@ -5,6 +5,14 @@ import './OnSpaceAgentFloating.css';
 
 export default function OnSpaceAgentFloating() {
   const [isOpen, setIsOpen] = useState(false);
+  const [embedSession, setEmbedSession] = useState(0);
+
+  const togglePanel = () => {
+    setIsOpen((prev) => {
+      if (!prev) setEmbedSession((n) => n + 1);
+      return !prev;
+    });
+  };
 
   return (
     <div className="onspace-agent-floating" aria-live="polite">
@@ -22,7 +30,11 @@ export default function OnSpaceAgentFloating() {
             </button>
           </div>
           <div className="onspace-agent-floating__body">
-            <OnSpaceAgentEmbed fill className="onspace-agent-floating__embed" />
+            <OnSpaceAgentEmbed
+              fill
+              className="onspace-agent-floating__embed"
+              reloadKey={embedSession}
+            />
           </div>
           <p className="onspace-agent-floating__hint">
             Если окно пустое,{' '}
@@ -40,7 +52,7 @@ export default function OnSpaceAgentFloating() {
           'onspace-agent-floating__fab',
           isOpen ? 'onspace-agent-floating__fab--active' : '',
         ].join(' ')}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={togglePanel}
         aria-expanded={isOpen}
         aria-label={isOpen ? 'Закрыть ИИ-агента' : 'Открыть ИИ-агента'}
         title={isOpen ? 'Закрыть' : 'ИИ-агент'}
